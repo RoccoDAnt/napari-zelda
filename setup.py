@@ -1,5 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from setuptools import setup
 
-setup()
+use_scm={"write_to": "napari_zelda/_version.py"}
+
+setup(
+    version='0.1.0')
