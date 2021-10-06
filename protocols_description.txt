@@ -1,0 +1,42 @@
+"ZELDA: a 3D Image Segmentation and Parent to Child relation plugin for microscopy image analysis in napari"
+
+Choose a Protocol from the drop-down menu below and click "Run".
+
+PROTOCOLS
+- "Segment a single object population".
+The protocol allows to segment a single object type such as cell nuclei or vesicles
+Suggested steps:
+1. Gaussian Blur
+2. Threshold
+3. Distance map
+4. Show seeds
+5. Watershed
+6. Measure objects
+7. Plot data and save graphs.
+
+- "Segment two object populations and relate Parent to Child".
+The protocol allows to segment in parallel two populations.
+The larger objects, called Parents, may contain the smallest ones called "Children".
+For example, cytoplasmic organelles can be segmented, labelled and measured according to the parent cell.
+Suggested steps:
+1. Gaussian Blur
+2. Threshold
+3. Distance map
+4. Show seeds
+5. Watershed
+6. Relate and Measure objects
+7. Plot data and save graphs
+
+- "Data Plotter" protocol.
+The protocol can be used to plot and save histograms and scatterplots of previously obtained result tables.
+1. Load a result table
+2. Use the Histogram/Scatter tool to explore the data
+3. Save the plots
+
+- "Design a New Protocol".
+A custom made image analysis protocol can be assembled using the available functions, such as Threshold, GaussianBlur et c. .
+1. Choose a name for the new protocol
+2. Set the number of steps for the new protocol
+3. Click "Design" \n4. Assign a function to execute at each step
+5. Save the new protocol
+The new protocol will be available in the drop-down menu after restarting napari.
