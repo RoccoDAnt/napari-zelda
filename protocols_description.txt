@@ -37,6 +37,7 @@ The protocol can be used to plot and save histograms and scatterplots of previou
 A custom made image analysis protocol can be assembled using the available functions, such as Threshold, GaussianBlur et c. .
 1. Choose a name for the new protocol
 2. Set the number of steps for the new protocol
-3. Click "Design" \n4. Assign a function to execute at each step
+3. Click "Design"
+4. Assign a function to execute at each step
 5. Save the new protocol
 The new protocol will be available in the drop-down menu after restarting napari.

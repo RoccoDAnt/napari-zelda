@@ -43,8 +43,6 @@ corresponding_widgets={
 
 protocols_description=open('protocols_description.txt', 'r').read()
 
-#pb=ProgressBar(value=80, max=100, label='ProgressBar:')
-
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':" apply Threshold"},
          threshold={'widget_type': 'FloatSlider', "max": 65535.0, 'min':0.0},
@@ -64,7 +62,6 @@ def threshold_one_pop(viewer: 'napari.Viewer', label, layer: Image, threshold: i
          persist=True)
 def threshold_parents(viewer: 'napari.Viewer', label, layer: Image, threshold: int = 1)-> napari.types.ImageData:
     if layer:
-        #print(napari.types.ImageData)
         th=layer.data>threshold
         viewer.add_image(th, name='Threshold th='+str(threshold)+' of '+str(layer.name))
 
@@ -86,7 +83,6 @@ def threshold_children(viewer: 'napari.Viewer', label, layer: Image, threshold: 
          call_button="Apply",
          persist=True)
 def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
-    #sigma.changed.connect(set_label)
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
@@ -98,11 +94,9 @@ def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: f
          call_button="Apply",
          persist=True)
 def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
-    #sigma.changed.connect(set_label)
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
-        #return skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode)
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':" apply Gaussian Blur to Children"},
@@ -111,11 +105,9 @@ def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma
          call_button="Apply",
          persist=True)
 def gaussian_blur_children_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
-    #sigma.changed.connect(set_label)
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
-        #return skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode)
 
 @magicgui(labels=False, label={'widget_type':'Label', 'value':"Get Distance Map of"}, call_button="Get DistanceMap", persist=True)
 def distance_map_one_pop(viewer: 'napari.Viewer', label, layer: Image)-> napari.types.ImageData:
@@ -312,8 +304,6 @@ def launch_ZELDA(
         viewer.window.add_dock_widget(dock_widgets, name='ZELDA: Protocol')
 
         if dropdown == 'Segment a single population':
-            pb=ProgressBar(value=50, max=100, label='ProgressBar:')
-            #threshold_one_pop.insert(0, Label(value='1. THRESHOLD').show())
             single_pop_protocol=Container(name='Single Population', annotation=None, label=None, visible=True, enabled=True,
                                           gui_only=False, layout='horizontal', labels=False)
             single_pop_protocol.insert(0, gaussian_blur_one_pop)
@@ -324,7 +314,6 @@ def launch_ZELDA(
             single_pop_protocol.insert(5, measure_one_pop)
             single_pop_protocol.insert(6, results_widget)
 
-            #dock_widgets.insert(0,pb)
             dock_widgets.insert(0,single_pop_protocol)
 
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
@@ -363,19 +352,11 @@ def launch_ZELDA(
         if dropdown == 'Design a New Protocol':
             new_protocol=Container(name='New Protocol', annotation=None, label=None, visible=True, enabled=True,
                                           gui_only=False, layout='horizontal', labels=False)
-            #new_protocol.insert(0,new_protocol_widget)
             new_protocol.insert(0, new_protocol_widget)
             dock_widgets.insert(0, new_protocol)
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
 
         if (protocols.index(dropdown)>3):
-            #protocols_file=open('protocols_dict.json', "rb")
-            #protocols_json = json.load(protocols_file)
-            #protocols=list()
-            #for i in range(0,len(protocols_json['Protocols'])):
-            #    protocols.append(protocols_json['Protocols'][i]['name'])
-            #protocols_file.seek(0)
-
             custom_panel=Container(name='Custom Protocol: "'+dropdown+'"', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='horizontal', labels=False)
 
@@ -410,7 +391,6 @@ def new_protocol_widget(viewer: 'napari.Viewer',
                    for k in range(0, np_steps):
                        np_container.insert(k, ComboBox(choices=steps_types, value=steps_types[0], label='Select step '+str(k+1)+':', name='step_'+str(k)+'', tooltip='Choose a function for this step of the custom protocol'))
 
-                   #print(np_container[0].value)
                    save_button=PushButton(name='Save Protocol', annotation=None, label=None, tooltip='Save current Protocol', visible=True, enabled=True, gui_only=False, text='Save', value=0)
                    save_button.changed.connect(save_protocol)
 
@@ -422,16 +402,12 @@ def new_protocol_widget(viewer: 'napari.Viewer',
 
 
 def save_protocol(self):
-        #print("button pressed")
         np_container = new_protocol_widget[3]
-
         line=new_protocol_widget.np_name.value+'\n'
-        #line='X'
         protocols_history=open('protocols_history.txt','a')
-        #protocols_history.write('Saved')
         protocols_history.write(line)
         protocols_history.close()
-        #add json
+        #add to json
         listed_steps={}
         np_json_entry ={"name": new_protocol_widget.np_name.value,
                         "widget": str(new_protocol_widget.np_name.value)+'_protocol_widget',
@@ -446,7 +422,6 @@ def save_protocol(self):
         json.dump(protocols_json, protocols_file, indent = 4)
         new_protocol_widget.Log.value = '"'+new_protocol_widget.np_name.value+'" saved to the database'
         new_protocol_widget.Log.visible=True
-
 
 
 ### End ###
