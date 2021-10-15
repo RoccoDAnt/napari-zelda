@@ -26,9 +26,13 @@ You can install `napari-zelda` via [pip]:
 
     pip install napari-zelda
 
+Alternatively, clone the repository and install locally via [pip]:
+
+    pip install -e .
+
 ## Contributing
 
-Contributions are very welcome. Tests can be run with [tox], please ensure
+Contributions are welcome. Tests can be run with [tox], please ensure
 the coverage at least stays the same before you submit a pull request.
 
 ## License

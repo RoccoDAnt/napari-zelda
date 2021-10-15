@@ -12,7 +12,6 @@ import skimage.filters
 from skimage.feature import peak_local_max
 from skimage.transform import rotate
 from skimage.segmentation import watershed
-#from skimage.morphology import watershed
 from skimage import measure
 import numpy as np
 import pandas as pd
@@ -21,9 +20,16 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 import json
+import os
+import inspect
 
-protocols_file=open('protocols_dict.json', "rb")
-#protocols_file=open('protocols_dict.json', "r+")
+def mock():
+    return
+
+path=os.path.abspath(inspect.getfile(mock))
+prot_path=os.path.dirname(os.path.dirname(path))
+
+protocols_file=open(prot_path+'\protocols_dict.json', "rb")
 protocols_json = json.load(protocols_file)
 protocols=list()
 for i in range(0,len(protocols_json['Protocols'])):
@@ -41,7 +47,7 @@ corresponding_widgets={
                         "Plot": "results_widget",
                         }
 
-protocols_description=open('protocols_description.txt', 'r').read()
+protocols_description=open(prot_path+'\protocols_description.txt', 'r').read()
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':" apply Threshold"},
@@ -404,7 +410,7 @@ def new_protocol_widget(viewer: 'napari.Viewer',
 def save_protocol(self):
         np_container = new_protocol_widget[3]
         line=new_protocol_widget.np_name.value+'\n'
-        protocols_history=open('protocols_history.txt','a')
+        protocols_history=open(prot_path+'\protocols_history.txt','a')
         protocols_history.write(line)
         protocols_history.close()
         #add to json
@@ -415,7 +421,7 @@ def save_protocol(self):
                         }
         np_json_entry["steps"]=[{ "step_number": j+1, "step_name": str(np_container[j].value) } for j in range(0, (new_protocol_widget.np_steps.value))]
 
-        protocols_file=open('protocols_dict.json', "r+")
+        protocols_file=open(prot_path+'\protocols_dict.json', "r+")
         protocols_json = json.load(protocols_file)
         protocols_json["Protocols"].append(np_json_entry)
         protocols_file.seek(0)
