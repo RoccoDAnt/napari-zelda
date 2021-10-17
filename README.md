@@ -6,7 +6,7 @@
 [![tests](https://github.com/RoccoDAnt/napari-zelda/workflows/tests/badge.svg)](https://github.com/RoccoDAnt/napari-zelda/actions)
 [![codecov](https://codecov.io/gh/RoccoDAnt/napari-zelda/branch/master/graph/badge.svg)](https://codecov.io/gh/RoccoDAnt/napari-zelda)
 
-ZELDA: a 3D Image Segmentation and Parent to Child relation plugin for microscopy image analysis in napari
+ZELDA: a 3D Image Segmentation and Parent-Child relation plugin for microscopy image analysis in napari
 
 ----------------------------------
 

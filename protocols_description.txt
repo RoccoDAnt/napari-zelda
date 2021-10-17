@@ -1,4 +1,4 @@
-"ZELDA: a 3D Image Segmentation and Parent to Child relation plugin for microscopy image analysis in napari"
+"ZELDA: a 3D Image Segmentation and Parent-Child relation plugin for microscopy image analysis in napari"
 
 Choose a Protocol from the drop-down menu below and click "Run".
 

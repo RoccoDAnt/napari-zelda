@@ -1,5 +1,5 @@
 """
-ZELDA: a 3D Image Segmentation and Parent to Child relation plugin for microscopy image analysis in napari
+ZELDA: a 3D Image Segmentation and Parent-Child relation plugin for microscopy image analysis in napari
 """
 from napari_plugin_engine import napari_hook_implementation
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QPushButton, QGridLayout, QGroupBox
