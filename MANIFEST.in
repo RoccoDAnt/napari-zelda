@@ -1,9 +1,6 @@
 include LICENSE
 include README.md
 include requirements.txt
-include protocols_description.txt
-include protocols_dict.json
-include protocols_history.txt
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
