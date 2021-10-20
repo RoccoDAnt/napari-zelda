@@ -20,15 +20,35 @@ and review the napari docs for plugin developers:
 https://napari.org/docs/plugins/index.html
 -->
 
+
 ## Installation
 
-You can install `napari-zelda` via [pip]:
+**Option A.** You can install `napari-zelda` via [pip]. For the best experience, create a conda environment, and use napari 0.4.7, using the following instructions:
 
-    pip install napari-zelda
+    conda create -y -n napari-env python==3.8  
+    conda activate napari-env  
+    pip install "napari[all]"  
+    pip install napari==0.4.7  
+    pip install napari-zelda  
 
-Alternatively, clone the repository and install locally via [pip]:
+
+**Option B.** Alternatively, clone the repository and install locally via [pip]:
 
     pip install -e .
+
+**Option C.** Another option is to use the napari interface to install it (up to napari version 0.4.10 but the best experience is with napari 0.4.7):
+1. Plugins / Install/Uninstall Package(s)
+![](/docs/Clipboard_ZELDA_Plugin_install_in_napari.png)
+
+2. Choose ZELDA
+![](/docs/Clipboard_ZELDA_Plugin_install_ZELDA_in_napari_Arrow.png)
+
+3. ZELDA is installed
+![](/docs/Clipboard_ZELDA_Plugin_installed_ZELDA_in_napari_Arrow.png)
+
+4. Launch ZELDA
+![](/docs/Clipboard_ZELDA_Launch_ZELDA.png)
+
 
 ## Contributing
 

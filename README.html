@@ -38,10 +38,30 @@ and review the napari docs for plugin developers:
 https://napari.org/docs/plugins/index.html
 -->
 
+
 <h2 id="installation">Installation</h2>
-<p>You can install <code>napari-zelda</code> via <a href="https://pypi.org/project/pip/">pip</a>:</p>
-<pre><code>pip install napari-zelda</code></pre><p>Alternatively, clone the repository and install locally via <a href="https://pypi.org/project/pip/">pip</a>:</p>
-<pre><code>pip install -e .</code></pre><h2 id="contributing">Contributing</h2>
+<p><strong>Option A.</strong> You can install <code>napari-zelda</code> via <a href="https://pypi.org/project/pip/">pip</a>. For the best experience, create a conda environment, and use napari 0.4.7, using the following instructions:</p>
+<pre><code>conda create -y -n napari-env python==3.8  
+conda activate napari-env  
+pip install &quot;napari[all]&quot;  
+pip install napari==0.4.7  
+pip install napari-zelda  </code></pre><p><strong>Option B.</strong> Alternatively, clone the repository and install locally via <a href="https://pypi.org/project/pip/">pip</a>:</p>
+<pre><code>pip install -e .</code></pre><p><strong>Option C.</strong> Another option is to use the napari interface to install it (up to napari version 0.4.10 but the best experience is with napari 0.4.7):</p>
+<ol>
+<li><p>Plugins / Install/Uninstall Package(s)
+<img src="/docs/Clipboard_ZELDA_Plugin_install_in_napari.png" alt></p>
+</li>
+<li><p>Choose ZELDA
+<img src="/docs/Clipboard_ZELDA_Plugin_install_ZELDA_in_napari_Arrow.png" alt></p>
+</li>
+<li><p>ZELDA is installed
+<img src="/docs/Clipboard_ZELDA_Plugin_installed_ZELDA_in_napari_Arrow.png" alt></p>
+</li>
+<li><p>Launch ZELDA
+<img src="/docs/Clipboard_ZELDA_Launch_ZELDA.png" alt></p>
+</li>
+</ol>
+<h2 id="contributing">Contributing</h2>
 <p>Contributions are welcome. Tests can be run with <a href="https://tox.readthedocs.io/en/latest/">tox</a>, please ensure
 the coverage at least stays the same before you submit a pull request.</p>
 <h2 id="license">License</h2>
