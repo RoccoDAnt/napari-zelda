@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/RoccoDAnt/napari-zelda/branch/master/graph/badge.svg)](https://codecov.io/gh/RoccoDAnt/napari-zelda)
 
 ## ZELDA: a 3D Image Segmentation and Parent-Child relation plugin for microscopy image analysis in napari
-###### Authors: Rocco D'Antuono, Giuseppina Pisignano
+##### Authors: Rocco D'Antuono, Giuseppina Pisignano
 ----------------------------------
 
 This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [cookiecutter-napari-plugin] template.
