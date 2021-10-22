@@ -28,7 +28,7 @@ https://napari.org/docs/plugins/index.html
   Example: cell cytoplasms (parent objects) and mitochondria (child objects)
   ![](/docs/2D-AF488.png) <br> **Actin** | ![](/docs/2D-MT.png) <br> **Mitochondria**| ![](/docs/2D-AF488_MT.png) <br> **Merge**
   ------ | ------| -----
-  ![](/docs/2D-AF488_parents.png) <br> **Parent cell cytoplasms** | ![](/docs/2D-MT_children.png) <br> **Children mitochondria**|  ![](/docs/2D-MT_childrenbyPArent.png) <br> **Children labelled by Parents**
+  ![](/docs/2D-AF488_parents.png) <br> **Parent cell cytoplasms** | ![](/docs/2D-MT_children.png) <br> **Children mitochondria**|  ![](/docs/2D-MT_childrenbyParent.png) <br> **Children labelled by Parents**
 
 
 3. Plot results within napari interface.
