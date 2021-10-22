@@ -20,6 +20,25 @@ and review the napari docs for plugin developers:
 https://napari.org/docs/plugins/index.html
 -->
 
+## What you can do with ZELDA plugin for napari
+1. Segment objects such as cells and organelles in 2D/3D.
+
+2. Segment two populations in 2D/3D (e.g. cells and organelles, nuclei and nuclear spots, tissue structures and cells) establishing the "Parent-Child" relation: count how many mitochondria are contained in each cell, how many spots localize in every nucleus, how many cells are within a tissue compartment.
+
+  Example: cell cytoplasms (parent objects) and mitochondria (child objects)
+  ![](/docs/2D-AF488.png) <br> **Actin** | ![](/docs/2D-MT.png) <br> **Mitochondria**| ![](/docs/2D-AF488_MT.png) <br> **Merge**
+  ------ | ------| -----
+  ![](/docs/2D-AF488_parents.png) <br> **Parent cell cytoplasms** | ![](/docs/2D-MT_children.png) <br> **Children mitochondria**|  ![](/docs/2D-MT_childrenbyPArent.png) <br> **Children labelled by Parents**
+
+
+3. Plot results within napari interface.
+
+    ![](/docs/Plot_hist_Area.png) <br> **Histogram** | ![](/docs/Plot_scatter_Area-EqDiam.png) <br> **Scatterplot**|
+    ------ | ------|
+4. Customize an image analysis workflow in graphical mode (no scripting knowledge required).
+  ![](/docs/CustomProtocol.png) <br> **Custom image analysis workflow** |
+  ------ |
+
 
 ## Installation
 

@@ -7,6 +7,7 @@ from napari.layers import Image, Labels, Layer, Points
 from magicgui import magicgui, magic_factory
 import napari
 from napari import Viewer
+from napari.settings import SETTINGS
 from magicgui.widgets import SpinBox, FileEdit, Slider, FloatSlider, Label, Container, MainWindow, ComboBox, TextEdit, PushButton, ProgressBar
 import skimage.filters
 from skimage.feature import peak_local_max
@@ -90,6 +91,7 @@ def threshold_children(viewer: 'napari.Viewer', label, layer: Image, threshold: 
          call_button="Apply",
          persist=True)
 def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
+    self.native.setMaximumWidth(50)
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
@@ -101,6 +103,7 @@ def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: f
          call_button="Apply",
          persist=True)
 def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
+    self.native.setMaximumWidth(50)
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
@@ -112,6 +115,7 @@ def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma
          call_button="Apply",
          persist=True)
 def gaussian_blur_children_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
+    self.native.setMaximumWidth(50)
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
@@ -289,9 +293,6 @@ def results_widget(viewer: 'napari.Viewer',
         if save_plots== True:
             plot_widget_scattering.print_tiff(str(saveTo_path)+'\Scatterplot of '+str(scatterplot_X)+' vs '+str(scatterplot_Y)+'.tiff')
 
-
-
-
 @magic_factory(
                auto_call=False,
                call_button=True,
@@ -306,12 +307,38 @@ def launch_ZELDA(
         dropdown: str= 'Segment a single population'
         ):
 
+        SETTINGS.application.save_window_geometry = "True"
+        minusculeWidget_maxWidth=100
+        smallWidget_maxWidth=120
+        mediumWidget_maxWidth=150
+        bigWidget_maxWidth=220
+        hugeWidget_maxWidth=290
+
+        gaussian_blur_one_pop.native.setMaximumWidth(minusculeWidget_maxWidth)
+        threshold_one_pop.native.setMaximumWidth(minusculeWidget_maxWidth)
+        distance_map_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        show_seeds_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        watershed_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        measure_one_pop.native.setMaximumWidth(bigWidget_maxWidth)
+        results_widget.native.setMaximumWidth(hugeWidget_maxWidth)
+
+        gaussian_blur_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        threshold_parents.native.setMaximumWidth(smallWidget_maxWidth)
+        distance_map_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        show_seeds_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        watershed_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        gaussian_blur_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        threshold_children.native.setMaximumWidth(smallWidget_maxWidth)
+        distance_map_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        show_seeds_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        watershed_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        relate_and_measure.native.setMaximumWidth(hugeWidget_maxWidth)
+
         dock_widgets=MainWindow(name='ZELDA protocol', annotation=None, label=None, tooltip=None, visible=True,
                                enabled=True, gui_only=False, backend_kwargs={}, layout='vertical', widgets=(), labels=True)
-        viewer.window.add_dock_widget(dock_widgets, name='ZELDA: Protocol')
-
+        viewer.window.add_dock_widget(dock_widgets, name=str(dropdown))
         if dropdown == 'Segment a single population':
-            single_pop_protocol=Container(name='Single Population', annotation=None, label=None, visible=True, enabled=True,
+            single_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
                                           gui_only=False, layout='horizontal', labels=False)
             single_pop_protocol.insert(0, gaussian_blur_one_pop)
             single_pop_protocol.insert(1, threshold_one_pop)
@@ -345,7 +372,8 @@ def launch_ZELDA(
 
             dock_widgets.insert(0,parent_pop_protocol)
             dock_widgets.insert(1,children_pop_protocol)
-            viewer.window.add_dock_widget(relate_and_measure, name='ZELDA: Relate and Measure',area='bottom')
+
+            viewer.window.add_dock_widget(relate_and_measure, name='ZELDA: Relate and Measure', area='bottom')
 
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
 
@@ -354,6 +382,7 @@ def launch_ZELDA(
                                           gui_only=False, layout='horizontal', labels=False)
             data_plotter_protocol.insert(0,results_widget)
             dock_widgets.insert(0,data_plotter_protocol)
+
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
 
         if dropdown == 'Design a New Protocol':
@@ -361,6 +390,7 @@ def launch_ZELDA(
                                           gui_only=False, layout='horizontal', labels=False)
             new_protocol.insert(0, new_protocol_widget)
             dock_widgets.insert(0, new_protocol)
+
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
 
         if (protocols.index(dropdown)>3):

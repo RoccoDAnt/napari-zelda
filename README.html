@@ -38,7 +38,26 @@ and review the napari docs for plugin developers:
 https://napari.org/docs/plugins/index.html
 -->
 
-
+<h2 id="what-you-can-do-with-zelda-plugin-for-napari">What you can do with ZELDA plugin for napari</h2>
+<ol>
+<li><p>Segment objects such as cells and organelles in 2D/3D.</p>
+</li>
+<li><p>Segment two populations in 2D/3D (e.g. cells and organelles, nuclei and nuclear spots, tissue structures and cells) establishing the &quot;Parent-Child&quot; relation: count how many mitochondria are contained in each cell, how many spots localize in every nucleus, how many cells are within a tissue compartment.</p>
+<p>Example: cell cytoplasms (parent objects) and mitochondria (child objects)
+<img src="/docs/2D-AF488.png" alt> <br> <strong>Actin</strong> | <img src="/docs/2D-MT.png" alt> <br> <strong>Mitochondria</strong>| <img src="/docs/2D-AF488_MT.png" alt> <br> <strong>Merge</strong>
+------ | ------| -----
+<img src="/docs/2D-AF488_parents.png" alt> <br> <strong>Parent cell cytoplasms</strong> | <img src="/docs/2D-MT_children.png" alt> <br> <strong>Children mitochondria</strong>|  <img src="/docs/2D-MT_childrenbyPArent.png" alt> <br> <strong>Children labelled by Parents</strong></p>
+</li>
+</ol>
+<ol start="3">
+<li><p>Plot results within napari interface.</p>
+<p> <img src="/docs/Plot_hist_Area.png" alt> <br> <strong>Histogram</strong> | <img src="/docs/Plot_scatter_Area-EqDiam.png" alt> <br> <strong>Scatterplot</strong>|
+ ------ | ------|</p>
+</li>
+<li>Customize an image analysis workflow in graphical mode (no scripting knowledge required).
+<img src="/docs/CustomProtocol.png" alt> <br> <strong>Custom image analysis workflow</strong> |
+------ |</li>
+</ol>
 <h2 id="installation">Installation</h2>
 <p><strong>Option A.</strong> You can install <code>napari-zelda</code> via <a href="https://pypi.org/project/pip/">pip</a>. For the best experience, create a conda environment, and use napari 0.4.7, using the following instructions:</p>
 <pre><code>conda create -y -n napari-env python==3.8  
