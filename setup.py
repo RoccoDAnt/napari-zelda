@@ -7,6 +7,7 @@ setup(
     version='0.1.2',
     author="Rocco D'Antuono, Giuseppina Pisignano",
     description="ZELDA: a 3D Image Segmentation and Parent-Child relation plugin for microscopy image analysis in napari",
+    download_url = 'https://github.com/RoccoDAnt/napari-zelda/archive/refs/tags/v0.1.2.tar.gz',
     packages=find_packages(),
     include_package_data=True
     )
