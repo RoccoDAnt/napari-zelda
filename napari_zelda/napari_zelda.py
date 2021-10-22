@@ -52,7 +52,7 @@ corresponding_widgets={
 protocols_description=open(prot_path+'\\napari_zelda'+'\protocols_description.txt', 'r').read()
 
 @magicgui(labels=False,
-         label={'widget_type':'Label', 'value':" apply Threshold"},
+         label={'widget_type':'Label', 'value':"Threshold"},
          threshold={'widget_type': 'FloatSlider', "max": 65535.0, 'min':0.0},
          call_button="Apply",
          persist=True
@@ -64,7 +64,7 @@ def threshold_one_pop(viewer: 'napari.Viewer', label, layer: Image, threshold: i
 
 
 @magicgui(labels=False,
-         label={'widget_type':'Label', 'value':" apply Threshold to Parents"},
+         label={'widget_type':'Label', 'value':"Threshold - Parents"},
          threshold={'widget_type': 'FloatSlider', "max": 65535.0, 'min':0.0},
          call_button="Apply",
          persist=True)
@@ -74,7 +74,7 @@ def threshold_parents(viewer: 'napari.Viewer', label, layer: Image, threshold: i
         viewer.add_image(th, name='Threshold th='+str(threshold)+' of '+str(layer.name))
 
 @magicgui(labels=False,
-         label={'widget_type':'Label', 'value':" apply Threshold to Children"},
+         label={'widget_type':'Label', 'value':"Threshold - Children"},
          threshold={'widget_type': 'FloatSlider', "max": 65535.0, 'min':0.0},
          call_button="Apply",
          persist=True)
@@ -85,7 +85,7 @@ def threshold_children(viewer: 'napari.Viewer', label, layer: Image, threshold: 
 
 
 @magicgui(labels=False,
-         label={'widget_type':'Label', 'value':" apply Gaussian Blur"},
+         label={'widget_type':'Label', 'value':"Gaussian Blur"},
          sigma={'widget_type': 'FloatSlider', "max": 10.0, 'min':0.0},
          mode={"choices": ["reflect", "constant", "nearest", "mirror", "wrap"]},
          call_button="Apply",
@@ -97,7 +97,7 @@ def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: f
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
 
 @magicgui(labels=False,
-         label={'widget_type':'Label', 'value':" apply Gaussian Blur to Parents"},
+         label={'widget_type':'Label', 'value':"Gaussian Blur - Parents"},
          sigma={'widget_type': 'FloatSlider', "max": 10.0, 'min':0.0},
          mode={"choices": ["reflect", "constant", "nearest", "mirror", "wrap"]},
          call_button="Apply",
@@ -109,7 +109,7 @@ def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
 
 @magicgui(labels=False,
-         label={'widget_type':'Label', 'value':" apply Gaussian Blur to Children"},
+         label={'widget_type':'Label', 'value':"Gaussian Blur - Children"},
          sigma={'widget_type': 'FloatSlider', "max": 10.0, 'min':0.0},
          mode={"choices": ["reflect", "constant", "nearest", "mirror", "wrap"]},
          call_button="Apply",
@@ -120,21 +120,21 @@ def gaussian_blur_children_pop(viewer: 'napari.Viewer', label, layer: Image, sig
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
 
-@magicgui(labels=False, label={'widget_type':'Label', 'value':"Get Distance Map of"}, call_button="Get DistanceMap", persist=True)
+@magicgui(labels=False, label={'widget_type':'Label', 'value':"Distance Map"}, call_button="Get DistanceMap", persist=True)
 def distance_map_one_pop(viewer: 'napari.Viewer', label, layer: Image)-> napari.types.ImageData:
     if layer:
         img=layer.data*255
         dist_map=ndimage.distance_transform_edt(img)
         viewer.add_image(dist_map, name='DistMap of '+str(layer.name))
 
-@magicgui(labels=False, label={'widget_type':'Label', 'value':"Get Distance Map of Parents"}, call_button="Get DistanceMap", persist=True)
+@magicgui(labels=False, label={'widget_type':'Label', 'value':"Distance Map - Parents"}, call_button="Get DistanceMap", persist=True)
 def distance_map_parent_pop(viewer: 'napari.Viewer', label, layer: Image)-> napari.types.ImageData:
     if layer:
         img=layer.data*255
         dist_map=ndimage.distance_transform_edt(img)
         viewer.add_image(dist_map, name='DistMap of '+str(layer.name))
 
-@magicgui(labels=False, label={'widget_type':'Label', 'value':"Get Distance Map of Children"}, call_button="Get DistanceMap", persist=True)
+@magicgui(labels=False, label={'widget_type':'Label', 'value':"Distance Map - Children"}, call_button="Get DistanceMap", persist=True)
 def distance_map_children_pop(viewer: 'napari.Viewer', label, layer: Image)-> napari.types.ImageData:
     if layer:
         img=layer.data*255
@@ -148,21 +148,21 @@ def show_seeds_one_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, mask:
         points = np.array(coords)
         viewer.add_points(points, name='Maxima at dist_min='+str(min_dist)+' of '+str(DistanceMap.name), size=3)
 
-@magicgui(label={'widget_type':'Label', 'label':"Show seeds for Parents"}, call_button="Show seeds", persist=True)
+@magicgui(label={'widget_type':'Label', 'label':"Show seeds - Parents"}, call_button="Show seeds", persist=True)
 def show_seeds_parent_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, mask: Image, min_dist: int=1)-> napari.types.ImageData:
     if DistanceMap:
         coords = skimage.feature.peak_local_max(DistanceMap.data, labels=mask.data, min_distance=min_dist)
         points = np.array(coords)
         viewer.add_points(points, name='Maxima at dist_min='+str(min_dist)+' of '+str(DistanceMap.name), size=3)
 
-@magicgui(label={'widget_type':'Label', 'label':"Show seeds for Children"}, call_button="Show seeds", persist=True)
+@magicgui(label={'widget_type':'Label', 'label':"Show seeds - Children"}, call_button="Show seeds", persist=True)
 def show_seeds_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, mask: Image, min_dist: int=1)-> napari.types.ImageData:
     if DistanceMap:
         coords = skimage.feature.peak_local_max(DistanceMap.data, labels=mask.data, min_distance=min_dist)
         points = np.array(coords)
         viewer.add_points(points, name='Maxima at dist_min='+str(min_dist)+' of '+str(DistanceMap.name), size=3)
 
-@magicgui(label={'widget_type':'Label', 'label':"Segment with Watershed"}, call_button="Watershed", persist=True)
+@magicgui(label={'widget_type':'Label', 'label':"Segment"}, call_button="Watershed", persist=True)
 def watershed_one_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, binary: Image, seeds: Points)-> napari.types.ImageData:
     if DistanceMap:
         mask = np.zeros(DistanceMap.data.shape, dtype=bool)
@@ -191,15 +191,15 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
 
 @magicgui(label={'widget_type':'Label', 'label':"Measure segmented objects"}, call_button="Measure objects",
           save_log={'widget_type':'CheckBox','name':'Save_Log','text':'Save Log'},
-          save_to_path={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
+          save_to={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path','label':False},
           persist=True
             )
-def measure_one_pop( label, labels: Image, original: Image, save_log, save_to_path):
+def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     properties=measure.regionprops_table(labels.data, original.data,
                properties= ['area', 'mean_intensity','equivalent_diameter'])
     prop={'Area': properties['area'],'Equivalent_diameter': properties['equivalent_diameter'],'MFI': properties['mean_intensity']}
     prop_df=pd.DataFrame(prop)
-    prop_df.to_csv(str(save_to_path)+'\Results.csv')
+    prop_df.to_csv(str(save_to)+'\Results.csv')
 
     log=Label(name='Log:', tooltip=None,)
     log.value="-> Th="+str(threshold_one_pop.threshold.value)+"-> GB: sigma="+str(gaussian_blur_one_pop.sigma.value)+"-> DistMap"
@@ -207,7 +207,7 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to_pa
     measure_one_pop.insert(4,log)
 
     if save_log == True:
-        Log_file = open(str(save_to_path)+'\Log_ZELDA_single_population.txt','w')
+        Log_file = open(str(save_to)+'\Log_ZELDA_single_population.txt','w')
         Log_file.write(log.value)
         Log_file.close()
 
