@@ -7,7 +7,6 @@ from napari.layers import Image, Labels, Layer, Points
 from magicgui import magicgui, magic_factory
 import napari
 from napari import Viewer
-from napari.settings import SETTINGS
 from magicgui.widgets import SpinBox, FileEdit, Slider, FloatSlider, Label, Container, MainWindow, ComboBox, TextEdit, PushButton, ProgressBar
 import skimage.filters
 from skimage.feature import peak_local_max
@@ -307,7 +306,6 @@ def launch_ZELDA(
         dropdown: str= 'Segment a single population'
         ):
 
-        SETTINGS.application.save_window_geometry = "True"
         minusculeWidget_maxWidth=100
         smallWidget_maxWidth=120
         mediumWidget_maxWidth=150

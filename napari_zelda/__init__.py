@@ -4,11 +4,6 @@ try:
 except ImportError:
     __version__ = "unknown"
 
-from napari_plugin_engine import napari_hook_implementation
-
-@napari_hook_implementation
 def napari_experimental_provide_dock_widget():
     from .napari_zelda import launch_ZELDA
     return launch_ZELDA
-#from ._reader import napari_get_reader
-#from ._writer import napari_get_writer
