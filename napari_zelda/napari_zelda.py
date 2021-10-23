@@ -7,6 +7,10 @@ from napari.layers import Image, Labels, Layer, Points
 from magicgui import magicgui, magic_factory
 import napari
 from napari import Viewer
+try:
+    from napari.settings import SETTINGS
+except ImportError:
+    print("Warning: import of napari.settings failed - 'save window geometry' option will not be used")
 from magicgui.widgets import SpinBox, FileEdit, Slider, FloatSlider, Label, Container, MainWindow, ComboBox, TextEdit, PushButton, ProgressBar
 import skimage.filters
 from skimage.feature import peak_local_max
@@ -37,6 +41,7 @@ for i in range(0,len(protocols_json['Protocols'])):
     protocols.append(protocols_json['Protocols'][i]['name'])
 
 protocols_file.seek(0)
+protocols_file.close()
 
 corresponding_widgets={
                         "Threshold": "threshold_one_pop",
@@ -49,6 +54,7 @@ corresponding_widgets={
                         }
 
 protocols_description=open(prot_path+'\\napari_zelda'+'\protocols_description.txt', 'r').read()
+
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Threshold"},
@@ -306,11 +312,19 @@ def launch_ZELDA(
         dropdown: str= 'Segment a single population'
         ):
 
+        try:
+            SETTINGS.application.save_window_geometry = "False"
+        except:
+            pass
+
         minusculeWidget_maxWidth=100
         smallWidget_maxWidth=120
         mediumWidget_maxWidth=150
         bigWidget_maxWidth=220
         hugeWidget_maxWidth=290
+
+        widgetHeight_small=125
+        widgetHeight_big=265
 
         gaussian_blur_one_pop.native.setMaximumWidth(minusculeWidget_maxWidth)
         threshold_one_pop.native.setMaximumWidth(minusculeWidget_maxWidth)
@@ -319,6 +333,15 @@ def launch_ZELDA(
         watershed_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         measure_one_pop.native.setMaximumWidth(bigWidget_maxWidth)
         results_widget.native.setMaximumWidth(hugeWidget_maxWidth)
+
+        gaussian_blur_one_pop.native.setMaximumHeight(widgetHeight_big)
+        threshold_one_pop.native.setMaximumHeight(widgetHeight_big)
+        distance_map_one_pop.native.setMaximumHeight(widgetHeight_big)
+        show_seeds_one_pop.native.setMaximumHeight(widgetHeight_big)
+        watershed_one_pop.native.setMaximumHeight(widgetHeight_big)
+        measure_one_pop.native.setMaximumHeight(widgetHeight_big)
+        results_widget.native.setMaximumHeight(widgetHeight_big)
+
 
         gaussian_blur_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         threshold_parents.native.setMaximumWidth(smallWidget_maxWidth)
@@ -332,9 +355,21 @@ def launch_ZELDA(
         watershed_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         relate_and_measure.native.setMaximumWidth(hugeWidget_maxWidth)
 
+        gaussian_blur_parent_pop.native.setMaximumHeight(widgetHeight_small)
+        threshold_parents.native.setMaximumHeight(widgetHeight_small)
+        distance_map_parent_pop.native.setMaximumHeight(widgetHeight_small)
+        show_seeds_parent_pop.native.setMaximumHeight(widgetHeight_small)
+        watershed_parent_pop.native.setMaximumHeight(widgetHeight_small)
+        gaussian_blur_children_pop.native.setMaximumHeight(widgetHeight_small)
+        threshold_children.native.setMaximumHeight(widgetHeight_small)
+        distance_map_children_pop.native.setMaximumHeight(widgetHeight_small)
+        show_seeds_children_pop.native.setMaximumHeight(widgetHeight_small)
+        watershed_children_pop.native.setMaximumHeight(widgetHeight_small)
+        relate_and_measure.native.setMaximumHeight(widgetHeight_big)
+
         dock_widgets=MainWindow(name='ZELDA protocol', annotation=None, label=None, tooltip=None, visible=True,
-                               enabled=True, gui_only=False, backend_kwargs={}, layout='vertical', widgets=(), labels=True)
-        viewer.window.add_dock_widget(dock_widgets, name=str(dropdown))
+                               enabled=True, gui_only=False, backend_kwargs={}, layout='horizontal', widgets=(), labels=True)
+        viewer.window.add_dock_widget(dock_widgets, name=str(dropdown), area='bottom')
         if dropdown == 'Segment a single population':
             single_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
                                           gui_only=False, layout='horizontal', labels=False)
@@ -351,7 +386,7 @@ def launch_ZELDA(
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
 
         if dropdown == 'Segment two populations and relate':
-            parent_pop_protocol=Container(name='Parent Population', annotation=None, label=None, visible=True, enabled=True,
+            parent_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='horizontal', labels=False)
             parent_pop_protocol.insert(0, gaussian_blur_parent_pop)
             parent_pop_protocol.insert(1, threshold_parents)
@@ -360,7 +395,7 @@ def launch_ZELDA(
             parent_pop_protocol.insert(4, watershed_parent_pop)
 
 
-            children_pop_protocol=Container(name='Children Population', annotation=None, label=None, visible=True, enabled=True,
+            children_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
                                           gui_only=False, layout='horizontal', labels=False)
             children_pop_protocol.insert(0, gaussian_blur_children_pop)
             children_pop_protocol.insert(1, threshold_children)
@@ -371,7 +406,12 @@ def launch_ZELDA(
             dock_widgets.insert(0,parent_pop_protocol)
             dock_widgets.insert(1,children_pop_protocol)
 
-            viewer.window.add_dock_widget(relate_and_measure, name='ZELDA: Relate and Measure', area='bottom')
+            parent_children_container=Container(name='Parent-Child segmentation', annotation=None, label=None, visible=True, enabled=True,
+                                         gui_only=False, layout='vertical', labels=False)
+            parent_children_container.insert(0,parent_pop_protocol)
+            parent_children_container.insert(1,children_pop_protocol)
+            dock_widgets.insert(0, parent_children_container)
+            dock_widgets.insert(1, relate_and_measure)
 
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
 
@@ -440,7 +480,6 @@ def save_protocol(self):
         np_container = new_protocol_widget[3]
         line=new_protocol_widget.np_name.value+'\n'
         protocols_history=open(prot_path+'\\napari_zelda'+'\protocols_history.txt','a')
-
         protocols_history.write(line)
         protocols_history.close()
         #add to json
@@ -459,6 +498,6 @@ def save_protocol(self):
         json.dump(protocols_json, protocols_file, indent = 4)
         new_protocol_widget.Log.value = '"'+new_protocol_widget.np_name.value+'" saved to the database'
         new_protocol_widget.Log.visible=True
-
+        protocols_file.close()
 
 ### End ###
