@@ -28,7 +28,7 @@ https://napari.org/docs/plugins/index.html
   Example: cell cytoplasms (parent objects) and mitochondria (child objects)
   ![](/docs/2D-AF488.png) <br> **Actin** | ![](/docs/2D-MT.png) <br> **Mitochondria**| ![](/docs/2D-AF488_MT.png) <br> **Merge**
   ------ | ------| -----
-  ![](/docs/2D-AF488_parents.png) <br> **Parent cell cytoplasms** | ![](/docs/2D-MT_children.png) <br> **Children mitochondria**|  ![](/docs/2D-MT_childrenbyParent.png) <br> **Children labelled by Parents**
+  ![](/docs/2D-AF488_parents.png) <br> **Parent cell cytoplasms** | ![](/docs/2D-MT_children.png) <br> **Children mitochondria**| ![](/docs/2D-MT_childrenbyParent.png) <br> **Children labelled by Parents**
 
 
 3. Plot results within napari interface.
@@ -42,12 +42,12 @@ https://napari.org/docs/plugins/index.html
 
 ## Installation
 
-**Option A.** You can install `napari-zelda` via [pip]. For the best experience, create a conda environment, and use napari 0.4.7, using the following instructions:
+**Option A.** You can install `napari-zelda` via [pip]. For the best experience, create a conda environment and use napari!=0.4.11, using the following instructions:
 
     conda create -y -n napari-env python==3.8  
     conda activate napari-env  
     pip install "napari[all]"  
-    pip install napari==0.4.7  
+    pip install napari!=0.4.11  
     pip install napari-zelda  
 
 
@@ -55,7 +55,7 @@ https://napari.org/docs/plugins/index.html
 
     pip install -e .
 
-**Option C.** Another option is to use the napari interface to install it (up to napari version 0.4.10 but the best experience is with napari 0.4.7):
+**Option C.** Another option is to use the napari interface to install it (make sure napari!=0.4.11):
 1. Plugins / Install/Uninstall Package(s)
 ![](/docs/Clipboard_ZELDA_Plugin_install_in_napari.png)
 
