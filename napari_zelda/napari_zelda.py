@@ -96,7 +96,6 @@ def threshold_children(viewer: 'napari.Viewer', label, layer: Image, threshold: 
          call_button="Apply",
          persist=True)
 def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
-    self.native.setMaximumWidth(50)
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
@@ -108,7 +107,6 @@ def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: f
          call_button="Apply",
          persist=True)
 def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
-    self.native.setMaximumWidth(50)
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
@@ -120,7 +118,6 @@ def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma
          call_button="Apply",
          persist=True)
 def gaussian_blur_children_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
-    self.native.setMaximumWidth(50)
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
         viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
