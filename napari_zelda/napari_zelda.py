@@ -12,6 +12,7 @@ try:
 except ImportError:
     print("Warning: import of napari.settings failed - 'save window geometry' option will not be used")
 from magicgui.widgets import SpinBox, FileEdit, Slider, FloatSlider, Label, Container, MainWindow, ComboBox, TextEdit, PushButton, ProgressBar
+import skimage
 import skimage.filters
 from skimage.feature import peak_local_max
 from skimage.transform import rotate
@@ -54,7 +55,6 @@ corresponding_widgets={
                         }
 
 protocols_description=open(prot_path+'\\napari_zelda'+'\protocols_description.txt', 'r').read()
-
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Threshold"},
@@ -443,7 +443,8 @@ def launch_ZELDA(
             dock_widgets.insert(0,custom_panel)
 
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
-
+        viewer.add_image(skimage.data.astronaut(), name='napari-zelda-astronaut-test', rgb=True)
+        viewer.layers.remove('napari-zelda-astronaut-test')
 
 #add Custom protocols
 @magicgui(layout="vertical",
