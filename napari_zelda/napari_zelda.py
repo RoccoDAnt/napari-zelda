@@ -58,15 +58,18 @@ protocols_description=open(os.path.join(prot_path,'napari_zelda','protocols_desc
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Threshold"},
+         Otsu={'widget_type':'CheckBox','name':'Otsu_threshold'},
          threshold={'widget_type': 'FloatSlider', "max": 65535.0, 'min':0.0},
          call_button="Apply",
          persist=True
          )
-def threshold_one_pop(viewer: 'napari.Viewer', label, layer: Image, threshold: int = 1)-> napari.types.ImageData:
+def threshold_one_pop(viewer: 'napari.Viewer', label, Otsu, layer: Image, threshold: int = 1)-> napari.types.ImageData:
     if layer:
+        if Otsu==True:
+            threshold = skimage.filters.threshold_otsu(np.array(layer.data))
+            print(threshold)
         th=layer.data>threshold
-        viewer.add_image(th, name='Threshold th='+str(threshold)+' of '+str(layer.name))
-
+        viewer.add_image(th, scale=layer.scale, name='Threshold th='+str(threshold)+' of '+str(layer.name))
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Threshold - Parents"},
@@ -76,7 +79,7 @@ def threshold_one_pop(viewer: 'napari.Viewer', label, layer: Image, threshold: i
 def threshold_parents(viewer: 'napari.Viewer', label, layer: Image, threshold: int = 1)-> napari.types.ImageData:
     if layer:
         th=layer.data>threshold
-        viewer.add_image(th, name='Threshold th='+str(threshold)+' of '+str(layer.name))
+        viewer.add_image(th, scale=layer.scale, name='Threshold th='+str(threshold)+' of '+str(layer.name))
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Threshold - Children"},
@@ -86,7 +89,7 @@ def threshold_parents(viewer: 'napari.Viewer', label, layer: Image, threshold: i
 def threshold_children(viewer: 'napari.Viewer', label, layer: Image, threshold: int = 1)-> napari.types.ImageData:
     if layer:
         th=layer.data>threshold
-        viewer.add_image(th, name='Threshold th='+str(threshold)+' of '+str(layer.name))
+        viewer.add_image(th, scale=layer.scale, name='Threshold th='+str(threshold)+' of '+str(layer.name))
 
 
 @magicgui(labels=False,
@@ -98,7 +101,7 @@ def threshold_children(viewer: 'napari.Viewer', label, layer: Image, threshold: 
 def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
-        viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
+        viewer.add_image(gb, scale=layer.scale, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Gaussian Blur - Parents"},
@@ -109,7 +112,7 @@ def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: f
 def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
-        viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
+        viewer.add_image(gb, scale=layer.scale, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Gaussian Blur - Children"},
@@ -120,28 +123,28 @@ def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma
 def gaussian_blur_children_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: float = 1.0, mode="nearest")-> napari.types.ImageData:
     if layer:
         gb=skimage.filters.gaussian(layer.data, sigma=sigma, mode=mode, preserve_range=True)
-        viewer.add_image(gb, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
+        viewer.add_image(gb, scale=layer.scale, name='GaussianBlur sigma='+str(sigma)+' of '+str(layer.name))
 
 @magicgui(labels=False, label={'widget_type':'Label', 'value':"Distance Map"}, call_button="Get DistanceMap", persist=True)
 def distance_map_one_pop(viewer: 'napari.Viewer', label, layer: Image)-> napari.types.ImageData:
     if layer:
         img=layer.data*255
         dist_map=ndimage.distance_transform_edt(img)
-        viewer.add_image(dist_map, name='DistMap of '+str(layer.name))
+        viewer.add_image(dist_map, scale=layer.scale, name='DistMap of '+str(layer.name))
 
 @magicgui(labels=False, label={'widget_type':'Label', 'value':"Distance Map - Parents"}, call_button="Get DistanceMap", persist=True)
 def distance_map_parent_pop(viewer: 'napari.Viewer', label, layer: Image)-> napari.types.ImageData:
     if layer:
         img=layer.data*255
         dist_map=ndimage.distance_transform_edt(img)
-        viewer.add_image(dist_map, name='DistMap of '+str(layer.name))
+        viewer.add_image(dist_map, scale=layer.scale, name='DistMap of '+str(layer.name))
 
 @magicgui(labels=False, label={'widget_type':'Label', 'value':"Distance Map - Children"}, call_button="Get DistanceMap", persist=True)
 def distance_map_children_pop(viewer: 'napari.Viewer', label, layer: Image)-> napari.types.ImageData:
     if layer:
         img=layer.data*255
         dist_map=ndimage.distance_transform_edt(img)
-        viewer.add_image(dist_map, name='DistMap of '+str(layer.name))
+        viewer.add_image(dist_map, scale=layer.scale, name='DistMap of '+str(layer.name))
 
 @magicgui(label={'widget_type':'Label', 'label':"Show seeds"}, call_button="Show seeds", persist=True)
 def show_seeds_one_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, mask: Image, min_dist: int=1)-> napari.types.ImageData:
@@ -171,7 +174,7 @@ def watershed_one_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, binary
         mask[tuple(seeds.data.T)] = True
         markers, _ = ndimage.label(mask)
         labels = skimage.segmentation.watershed(-DistanceMap.data, markers, mask=binary.data)
-        viewer.add_image(labels, rgb=False, name='Labelled objects', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
+        viewer.add_image(labels, scale=DistanceMap.scale, rgb=False, name='Labelled objects', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
 
 @magicgui(label={'widget_type':'Label', 'label':"Segment Parents"}, call_button="Watershed", persist=True)
 def watershed_parent_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, binary: Image, seeds: Points)-> napari.types.ImageData:
@@ -180,7 +183,7 @@ def watershed_parent_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, bin
         mask[tuple(seeds.data.T)] = True
         markers, _ = ndimage.label(mask)
         labels = skimage.segmentation.watershed(-DistanceMap.data, markers, mask=binary.data)
-        viewer.add_image(labels, rgb=False, name='Labelled Parent objects', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
+        viewer.add_image(labels, scale=DistanceMap.scale, rgb=False, name='Labelled Parent objects', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
 
 @magicgui(label={'widget_type':'Label', 'label':"Segment Children"}, call_button="Watershed", persist=True)
 def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, binary: Image, seeds: Points)-> napari.types.ImageData:
@@ -189,7 +192,7 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
         mask[tuple(seeds.data.T)] = True
         markers, _ = ndimage.label(mask)
         labels = skimage.segmentation.watershed(-DistanceMap.data, markers, mask=binary.data)
-        viewer.add_image(labels, rgb=False, name='Labelled Children objects', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
+        viewer.add_image(labels, scale=DistanceMap.scale, rgb=False, name='Labelled Children objects', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
 
 @magicgui(label={'widget_type':'Label', 'label':"Measure segmented objects"}, call_button="Measure objects",
           save_log={'widget_type':'CheckBox','name':'Save_Log','text':'Save Log'},
@@ -199,7 +202,7 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     properties=measure.regionprops_table(labels.data, original.data,
                properties= ['area', 'mean_intensity','equivalent_diameter'])
-    prop={'Area': properties['area'],'Equivalent_diameter': properties['equivalent_diameter'],'MFI': properties['mean_intensity']}
+    prop={'Area': properties['area']*np.prod(original.scale),'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity']}
     prop_df=pd.DataFrame(prop)
     prop_df.to_csv(str(save_to)+'\Results.csv')
 
@@ -222,10 +225,10 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
                properties= ['label','area', 'mean_intensity','equivalent_diameter'])
     binary_ch=Children_labels.data>0
     corresponding_parents=Parents_labels.data*binary_ch
-    viewer.add_image(corresponding_parents, rgb=False, name='Labelled children objects by parent', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
+    viewer.add_image(corresponding_parents, scale=Parents_labels.scale, rgb=False, name='Labelled children objects by parent', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
 
     properties_CorrespondingParent=measure.regionprops_table(Children_labels.data, Parents_labels.data, properties=['max_intensity'])
-    prop={'Parent_label': properties_CorrespondingParent['max_intensity'],'Area': properties['area'],'Equivalent_diameter': properties['equivalent_diameter'],'MFI': properties['mean_intensity']}
+    prop={'Parent_label': properties_CorrespondingParent['max_intensity'],'Area': properties['area']*np.prod(Original_to_measure.scale),'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity']}
     prop_df=pd.DataFrame(prop)
     prop_df.to_csv(str(save_to_path)+'\Results_parents-children.csv')
 
@@ -294,6 +297,39 @@ def results_widget(viewer: 'napari.Viewer',
         viewer.window.add_dock_widget(plot_widget_scattering,name='Plot results',area='bottom')
         if save_plots== True:
             plot_widget_scattering.print_tiff(str(saveTo_path)+'\Scatterplot of '+str(scatterplot_X)+' vs '+str(scatterplot_Y)+'.tiff')
+
+@magicgui(
+         xy={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001, 'label':'pixel size (um)'},
+         z={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001 , 'label':'z (um)'},
+         label={'widget_type':'Label', 'label':"Image calibration"},
+         call_button="Apply"
+         )
+def image_calibration(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
+    if layer:
+        scale=[int(z/xy), xy, xy]
+        layer.scale=scale[-layer.ndim:]
+
+@magicgui(
+         xy={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001, 'label':'pixel size (um)'},
+         z={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001 , 'label':'z (um)'},
+         label={'widget_type':'Label', 'label':"Image calibration parents"},
+         call_button="Apply"
+         )
+def image_calibration_parents(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
+    if layer:
+        scale=[int(z/xy), xy, xy]
+        layer.scale=scale[-layer.ndim:]
+
+@magicgui(
+         xy={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001, 'label':'pixel size (um)'},
+         z={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001 , 'label':'z (um)'},
+         label={'widget_type':'Label', 'label':"Image calibration children"},
+         call_button="Apply"
+         )
+def image_calibration_children(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
+    if layer:
+        scale=[int(z/xy), xy, xy]
+        layer.scale=scale[-layer.ndim:]
 
 @magic_factory(
                auto_call=False,
@@ -370,13 +406,14 @@ def launch_ZELDA(
         if dropdown == 'Segment a single population':
             single_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
                                           gui_only=False, layout='horizontal', labels=False)
-            single_pop_protocol.insert(0, gaussian_blur_one_pop)
-            single_pop_protocol.insert(1, threshold_one_pop)
-            single_pop_protocol.insert(2, distance_map_one_pop)
-            single_pop_protocol.insert(3, show_seeds_one_pop)
-            single_pop_protocol.insert(4, watershed_one_pop)
-            single_pop_protocol.insert(5, measure_one_pop)
-            single_pop_protocol.insert(6, results_widget)
+            single_pop_protocol.insert(0, image_calibration)
+            single_pop_protocol.insert(1, gaussian_blur_one_pop)
+            single_pop_protocol.insert(2, threshold_one_pop)
+            single_pop_protocol.insert(3, distance_map_one_pop)
+            single_pop_protocol.insert(4, show_seeds_one_pop)
+            single_pop_protocol.insert(5, watershed_one_pop)
+            single_pop_protocol.insert(6, measure_one_pop)
+            single_pop_protocol.insert(7, results_widget)
 
             dock_widgets.insert(0,single_pop_protocol)
 
@@ -385,20 +422,22 @@ def launch_ZELDA(
         if dropdown == 'Segment two populations and relate':
             parent_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='horizontal', labels=False)
-            parent_pop_protocol.insert(0, gaussian_blur_parent_pop)
-            parent_pop_protocol.insert(1, threshold_parents)
-            parent_pop_protocol.insert(2, distance_map_parent_pop)
-            parent_pop_protocol.insert(3, show_seeds_parent_pop)
-            parent_pop_protocol.insert(4, watershed_parent_pop)
+            parent_pop_protocol.insert(0, image_calibration_parents)
+            parent_pop_protocol.insert(1, gaussian_blur_parent_pop)
+            parent_pop_protocol.insert(2, threshold_parents)
+            parent_pop_protocol.insert(3, distance_map_parent_pop)
+            parent_pop_protocol.insert(4, show_seeds_parent_pop)
+            parent_pop_protocol.insert(5, watershed_parent_pop)
 
 
             children_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
                                           gui_only=False, layout='horizontal', labels=False)
-            children_pop_protocol.insert(0, gaussian_blur_children_pop)
-            children_pop_protocol.insert(1, threshold_children)
-            children_pop_protocol.insert(2, distance_map_children_pop)
-            children_pop_protocol.insert(3, show_seeds_children_pop)
-            children_pop_protocol.insert(4, watershed_children_pop)
+            children_pop_protocol.insert(0, image_calibration_children)
+            children_pop_protocol.insert(1, gaussian_blur_children_pop)
+            children_pop_protocol.insert(2, threshold_children)
+            children_pop_protocol.insert(3, distance_map_children_pop)
+            children_pop_protocol.insert(4, show_seeds_children_pop)
+            children_pop_protocol.insert(5, watershed_children_pop)
 
             dock_widgets.insert(0,parent_pop_protocol)
             dock_widgets.insert(1,children_pop_protocol)
@@ -449,7 +488,7 @@ def launch_ZELDA(
 #add Custom protocols
 @magicgui(layout="vertical",
           np_name={'widget_type': 'LineEdit', 'value':'MyNewProtocol','tooltip':'Name of the new protocol', 'label':'Name'},
-          np_steps={'widget_type': 'SpinBox', 'value':3, 'max':10, 'label': 'Steps:'},
+          np_steps={'widget_type': 'SpinBox', 'value':3, 'max':30, 'label': 'Steps:'},
           Log={'widget_type': 'Label', 'value':'', 'visible': False},
           persist=True,
           call_button="Design"
@@ -496,5 +535,11 @@ def save_protocol(self):
         new_protocol_widget.Log.value = '"'+new_protocol_widget.np_name.value+'" saved to the database'
         new_protocol_widget.Log.visible=True
         protocols_file.close()
+
+### Add here new functionalities for ZELDA ###
+#@magicgui(layout="vertical")
+#def new_functionality_widget(viewer: 'napari.Viewer'):
+#                   ...
+#
 
 ### End ###
