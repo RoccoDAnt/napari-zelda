@@ -45,18 +45,18 @@ https://napari.org/docs/plugins/index.html
 </li>
 <li><p>Segment two populations in 2D/3D (e.g. cells and organelles, nuclei and nuclear spots, tissue structures and cells) establishing the &quot;Parent-Child&quot; relation: count how many mitochondria are contained in each cell, how many spots localize in every nucleus, how many cells are within a tissue compartment.</p>
 <p>Example: cell cytoplasms (parent objects) and mitochondria (child objects)
-<img src="/docs/2D-AF488.png" alt> <br> <strong>Actin</strong> | <img src="/docs/2D-MT.png" alt> <br> <strong>Mitochondria</strong>| <img src="/docs/2D-AF488_MT.png" alt> <br> <strong>Merge</strong>
+<img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-AF488.png" alt> <br> <strong>Actin</strong> | <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT.png" alt> <br> <strong>Mitochondria</strong>| <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-AF488_MT.png" alt> <br> <strong>Merge</strong>
 ------ | ------| -----
-<img src="/docs/2D-AF488_parents.png" alt> <br> <strong>Parent cell cytoplasms</strong> | <img src="/docs/2D-MT_children.png" alt> <br> <strong>Children mitochondria</strong>|  <img src="/docs/2D-MT_childrenbyParent.png" alt> <br> <strong>Children labelled by Parents</strong></p>
+<img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-AF488_parents.png" alt> <br> <strong>Parent cell cytoplasms</strong> | <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT_children.png" alt> <br> <strong>Children mitochondria</strong>| <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT_childrenbyParent.png" alt> <br> <strong>Children labelled by Parents</strong></p>
 </li>
 </ol>
 <ol start="3">
 <li><p>Plot results within napari interface.</p>
-<p> <img src="/docs/Plot_hist_Area.png" alt> <br> <strong>Histogram</strong> | <img src="/docs/Plot_scatter_Area-EqDiam.png" alt> <br> <strong>Scatterplot</strong>|
+<p> <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Plot_hist_Area.png" alt> <br> <strong>Histogram</strong> | <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Plot_scatter_Area-EqDiam.png" alt> <br> <strong>Scatterplot</strong>|
  ------ | ------|</p>
 </li>
 <li>Customize an image analysis workflow in graphical mode (no scripting knowledge required).
-<img src="/docs/CustomProtocol.png" alt> <br> <strong>Custom image analysis workflow</strong> |
+<img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/CustomProtocol.png" alt> <br> <strong>Custom image analysis workflow</strong> |
 ------ |</li>
 </ol>
 <h2 id="installation">Installation</h2>
@@ -64,21 +64,20 @@ https://napari.org/docs/plugins/index.html
 <pre><code>conda create -y -n napari-env python==3.8  
 conda activate napari-env  
 pip install &quot;napari[all]&quot;  
-pip install napari!=0.4.11  
 pip install napari-zelda  </code></pre><p><strong>Option B.</strong> Alternatively, clone the repository and install locally via <a href="https://pypi.org/project/pip/">pip</a>:</p>
 <pre><code>pip install -e .</code></pre><p><strong>Option C.</strong> Another option is to use the napari interface to install it (make sure napari!=0.4.11):</p>
 <ol>
 <li><p>Plugins / Install/Uninstall Package(s)
-<img src="/docs/Clipboard_ZELDA_Plugin_install_in_napari.png" alt></p>
+<img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_in_napari.png" alt></p>
 </li>
 <li><p>Choose ZELDA
-<img src="/docs/Clipboard_ZELDA_Plugin_install_ZELDA_in_napari_Arrow.png" alt></p>
+<img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_ZELDA_in_napari_Arrow.png" alt></p>
 </li>
 <li><p>ZELDA is installed
-<img src="/docs/Clipboard_ZELDA_Plugin_installed_ZELDA_in_napari_Arrow.png" alt></p>
+<img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_installed_ZELDA_in_napari_Arrow.png" alt></p>
 </li>
 <li><p>Launch ZELDA
-<img src="/docs/Clipboard_ZELDA_Launch_ZELDA.png" alt></p>
+<img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Launch_ZELDA.png" alt></p>
 </li>
 </ol>
 <h2 id="contributing">Contributing</h2>
@@ -89,96 +88,6 @@ the coverage at least stays the same before you submit a pull request.</p>
 &quot;napari-zelda&quot; is free and open source software</p>
 <h2 id="issues">Issues</h2>
 <p>If you encounter any problems, please [file an issue] along with a detailed description.</p>
-<!-- This file is designed to provide you with a starting template for documenting
-the functionality of your plugin. Its content will be rendered on your plugin's
-napari hub page.
-
-The sections below are given as a guide for the flow of information only, and
-are in no way prescriptive. You should feel free to merge, remove, add and
-rename sections at will to make this document work best for your plugin.
-
-# Description
-
-This should be a detailed description of the context of your plugin and its
-intended purpose.
-
-If you have videos or screenshots of your plugin in action, you should include them
-here as well, to make them front and center for new users.
-
-You should use absolute links to these assets, so that we can easily display them
-on the hub. The easiest way to include a video is to use a GIF, for example hosted
-on imgur. You can then reference this GIF as an image.
-
-![Example GIF hosted on Imgur](https://i.imgur.com/A5phCX4.gif)
-
-Note that GIFs larger than 5MB won't be rendered by GitHub - we will however,
-render them on the napari hub.
-
-The other alternative, if you prefer to keep a video, is to use GitHub's video
-embedding feature.
-
-1. Push your `DESCRIPTION.md` to GitHub on your repository (this can also be done
-as part of a Pull Request)
-2. Edit `.napari/DESCRIPTION.md` **on GitHub**.
-3. Drag and drop your video into its desired location. It will be uploaded and
-hosted on GitHub for you, but will not be placed in your repository.
-4. We will take the resolved link to the video and render it on the hub.
-
-Here is an example of an mp4 video embedded this way.
-
-https://user-images.githubusercontent.com/17995243/120088305-6c093380-c132-11eb-822d-620e81eb5f0e.mp4
-
-# Intended Audience & Supported Data
-
-This section should describe the target audience for this plugin (any knowledge,
-skills and experience required), as well as a description of the types of data
-supported by this plugin.
-
-Try to make the data description as explicit as possible, so that users know the
-format your plugin expects. This applies both to reader plugins reading file formats
-and to function/dock widget plugins accepting layers and/or layer data.
-For example, if you know your plugin only works with 3D integer data in "tyx" order,
-make sure to mention this.
-
-If you know of researchers, groups or labs using your plugin, or if it has been cited
-anywhere, feel free to also include this information here.
-
-# Quickstart
-
-This section should go through step-by-step examples of how your plugin should be used.
-Where your plugin provides multiple dock widgets or functions, you should split these
-out into separate subsections for easy browsing. Include screenshots and videos
-wherever possible to elucidate your descriptions.
-
-Ideally, this section should start with minimal examples for those who just want a
-quick overview of the plugin's functionality, but you should definitely link out to
-more complex and in-depth tutorials highlighting any intricacies of your plugin, and
-more detailed documentation if you have it.
-
-# Additional Install Steps (uncommon)
-We will be providing installation instructions on the hub, which will be sufficient
-for the majority of plugins. They will include instructions to pip install, and
-to install via napari itself.
-
-Most plugins can be installed out-of-the-box by just specifying the package requirements
-over in `setup.cfg`. However, if your plugin has any more complex dependencies, or
-requires any additional preparation before (or after) installation, you should add
-this information here.
-
-# Getting Help
-
-This section should point users to your preferred support tools, whether this be raising
-an issue on GitHub, asking a question on image.sc, or using some other method of contact.
-If you distinguish between usage support and bug/feature support, you should state that
-here.
-
-# How to Cite
-
-Many plugins may be used in the course of published (or publishable) research, as well as
-during conference talks and other public facing events. If you'd like to be cited in
-a particular format, or have a DOI you'd like used, you should provide that information here. -->
-
-<p>The developer has not yet provided a napari-hub specific description.</p>
 </article></div><div style="background-color: #b4b2b2;width: 50px;height:50px;line-height: 50px;text-align: center;position: fixed;bottom: 10px;right: 10px;padding-top:5px;" onclick="document.documentElement.scrollTop = document.body.scrollTop =0;">
   <svg t="1533629773982" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1035" xlink="http://www.w3.org/1999/xlink" width="40" height="40"><defs><style type="text/css">@font-face { font-family: uc-nexus-iconfont; src: url("chrome-extension://pogijhnlcfmcppgimcaccdkmbedjkmhi/res/font_9qmmi8b8jsxxbt9.woff") format("woff"), url("chrome-extension://pogijhnlcfmcppgimcaccdkmbedjkmhi/res/font_9qmmi8b8jsxxbt9.ttf") format("truetype"); }
   </style></defs><path d="M536.255427 195.182354c-7.804756-7.804756-17.966187-11.615549-28.311813-11.615549-9.43693 0-18.874883 3.449565-26.496467 10.163477-2.360767 1.452071-4.356214 3.267417-6.352685 5.262864L218.47792 455.611735c-15.607466 15.60542-15.607466 40.834011 0 56.43943 15.607466 15.607466 41.558511 15.607466 57.167001 0l193.46013-192.733583 0 600.526219c0 22.1423 17.787108 39.927361 39.927361 39.927361 22.140253 0 39.927361-17.785062 39.927361-39.927361L548.959773 319.317583 737.15704 508.422522c15.607466 15.607466 40.469714 15.607466 56.078203 0 15.607466-15.607466 15.425318-40.834011-0.182149-56.441477L536.255427 195.182354 536.255427 195.182354z" p-id="1036" fill="#333"/><path d="M101.784174 143.097092l816.674071 0c22.140253 0 39.925315-17.785062 39.925315-39.927361 0-22.140253-17.784038-39.925315-39.925315-39.925315L101.784174 63.244416c-22.140253 0-39.927361 17.785062-39.927361 39.925315C61.856813 125.31203 79.643921 143.097092 101.784174 143.097092L101.784174 143.097092z" p-id="1037" fill="#333"/></svg>
