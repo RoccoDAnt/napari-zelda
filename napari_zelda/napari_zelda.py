@@ -19,7 +19,8 @@ from skimage.transform import rotate
 from skimage.segmentation import watershed
 from skimage import measure
 import numpy as np
-import pandas as pd
+#import pandas as pd
+import datatable as dt
 from scipy import ndimage, misc
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvas
@@ -203,12 +204,13 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     properties=measure.regionprops_table(labels.data, original.data,
                properties= ['area', 'mean_intensity','equivalent_diameter'])
     prop={'Area': properties['area']*np.prod(original.scale),'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity']}
-    prop_df=pd.DataFrame(prop)
+    #prop_df=pd.DataFrame(prop)
+    prop_df=dt.Frame(prop) #datatable instead of pandas
     prop_df.to_csv(str(save_to)+'\Results.csv')
 
-    log=Label(name='Log:', tooltip=None,)
+    log=Label(name='Log', tooltip=None)
     log.value="-> Th="+str(threshold_one_pop.threshold.value)+"-> GB: sigma="+str(gaussian_blur_one_pop.sigma.value)+"-> DistMap"
-    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_one_pop.min_dist.value) + " -> Found n="+str(len(prop_df))+ " objects"
+    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_one_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects"
     measure_one_pop.insert(4,log)
 
     if save_log == True:
@@ -229,14 +231,15 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
 
     properties_CorrespondingParent=measure.regionprops_table(Children_labels.data, Parents_labels.data, properties=['max_intensity'])
     prop={'Parent_label': properties_CorrespondingParent['max_intensity'],'Area': properties['area']*np.prod(Original_to_measure.scale),'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity']}
-    prop_df=pd.DataFrame(prop)
+    #prop_df=pd.DataFrame(prop)
+    prop_df=dt.Frame(prop) #datatable instead of pandas
     prop_df.to_csv(str(save_to_path)+'\Results_parents-children.csv')
 
-    log=Label(name='Log:', tooltip=None,)
+    log=Label(name='Log', tooltip=None)
     log.value="-> Th_parents="+str(threshold_parents.threshold.value)+"-> GB: sigma="+str(gaussian_blur_parent_pop.sigma.value)+"-> DistMap"
-    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_parent_pop.min_dist.value) + " -> Found n="+str(np.max(prop_df['Parent_label']))+ " objects"
+    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_parent_pop.min_dist.value) + " -> Found n="+str( np.max(prop_df['Parent_label'].to_numpy(), axis=0) )+ " objects"
     log.value=log.value+"\n-> Th_children="+str(threshold_children.threshold.value)+"-> GB: sigma="+str(gaussian_blur_children_pop.sigma.value)+"-> DistMap"
-    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_children_pop.min_dist.value) + " -> Found n="+str(len(prop_df))+ " objects"
+    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_children_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects"
     measure_one_pop.insert(4,log)
 
     #if save_log == True:
@@ -268,12 +271,12 @@ def results_widget(viewer: 'napari.Viewer',
                    scatterplot_X: str='Area',
                    scatterplot_Y: str='MFI'
                    ):
-    table=pd.read_csv(table_path)
-
+#    table=pd.read_csv(table_path)
+    table = dt.fread(table_path)
     if plot_h== True:
         plot_widget_histogram = FigureCanvas(Figure(figsize=(2, 1.5), dpi=150))
         ax = plot_widget_histogram.figure.subplots()
-        ax.set(xlim=(0, 10*np.median(table[str(histogram)])), ylim=(0,len(table)))
+        ax.set(xlim=(0, 10*np.median(table[str(histogram)])), ylim=(0, table.nrows))
         ax.set_title('Histogram of '+histogram, color='gray')
         ax.set_xlabel(str(histogram))
         ax.set_ylabel('Counts')
@@ -312,7 +315,7 @@ def image_calibration(viewer: 'napari.Viewer', label, layer: Image, xy: float = 
 @magicgui(
          xy={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001, 'label':'pixel size (um)'},
          z={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001 , 'label':'z (um)'},
-         label={'widget_type':'Label', 'label':"Image calibration parents"},
+         label={'widget_type':'Label', 'label':"Imgage calibration parents"},
          call_button="Apply"
          )
 def image_calibration_parents(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
@@ -323,7 +326,7 @@ def image_calibration_parents(viewer: 'napari.Viewer', label, layer: Image, xy: 
 @magicgui(
          xy={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001, 'label':'pixel size (um)'},
          z={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001 , 'label':'z (um)'},
-         label={'widget_type':'Label', 'label':"Image calibration children"},
+         label={'widget_type':'Label', 'label':"Imgage calibration children"},
          call_button="Apply"
          )
 def image_calibration_children(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
@@ -359,14 +362,16 @@ def launch_ZELDA(
         widgetHeight_small=125
         widgetHeight_big=265
 
-        gaussian_blur_one_pop.native.setMaximumWidth(minusculeWidget_maxWidth)
-        threshold_one_pop.native.setMaximumWidth(minusculeWidget_maxWidth)
+        image_calibration.native.setMaximumWidth(bigWidget_maxWidth)
+        gaussian_blur_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        threshold_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         distance_map_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         show_seeds_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         watershed_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         measure_one_pop.native.setMaximumWidth(bigWidget_maxWidth)
         results_widget.native.setMaximumWidth(hugeWidget_maxWidth)
 
+        image_calibration.native.setMaximumHeight(widgetHeight_big)
         gaussian_blur_one_pop.native.setMaximumHeight(widgetHeight_big)
         threshold_one_pop.native.setMaximumHeight(widgetHeight_big)
         distance_map_one_pop.native.setMaximumHeight(widgetHeight_big)
@@ -375,24 +380,27 @@ def launch_ZELDA(
         measure_one_pop.native.setMaximumHeight(widgetHeight_big)
         results_widget.native.setMaximumHeight(widgetHeight_big)
 
-
+        image_calibration_parents.native.setMaximumWidth(bigWidget_maxWidth)
         gaussian_blur_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
-        threshold_parents.native.setMaximumWidth(smallWidget_maxWidth)
+        threshold_parents.native.setMaximumWidth(mediumWidget_maxWidth)
         distance_map_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         show_seeds_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         watershed_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        image_calibration_children.native.setMaximumWidth(bigWidget_maxWidth)
         gaussian_blur_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
-        threshold_children.native.setMaximumWidth(smallWidget_maxWidth)
+        threshold_children.native.setMaximumWidth(mediumWidget_maxWidth)
         distance_map_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         show_seeds_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         watershed_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         relate_and_measure.native.setMaximumWidth(hugeWidget_maxWidth)
 
+        image_calibration_parents.native.setMaximumHeight(widgetHeight_small)
         gaussian_blur_parent_pop.native.setMaximumHeight(widgetHeight_small)
         threshold_parents.native.setMaximumHeight(widgetHeight_small)
         distance_map_parent_pop.native.setMaximumHeight(widgetHeight_small)
         show_seeds_parent_pop.native.setMaximumHeight(widgetHeight_small)
         watershed_parent_pop.native.setMaximumHeight(widgetHeight_small)
+        image_calibration_children.native.setMaximumHeight(widgetHeight_small)
         gaussian_blur_children_pop.native.setMaximumHeight(widgetHeight_small)
         threshold_children.native.setMaximumHeight(widgetHeight_small)
         distance_map_children_pop.native.setMaximumHeight(widgetHeight_small)
@@ -422,32 +430,34 @@ def launch_ZELDA(
         if dropdown == 'Segment two populations and relate':
             parent_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='horizontal', labels=False)
-            parent_pop_protocol.insert(0, image_calibration_parents)
+            #parent_pop_protocol.insert(0, image_calibration_parents)
             parent_pop_protocol.insert(1, gaussian_blur_parent_pop)
             parent_pop_protocol.insert(2, threshold_parents)
             parent_pop_protocol.insert(3, distance_map_parent_pop)
             parent_pop_protocol.insert(4, show_seeds_parent_pop)
             parent_pop_protocol.insert(5, watershed_parent_pop)
 
-
-            children_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
+            children_pop_protocol=Container(name=' ', annotation=None, label=None, visible=True, enabled=True,
                                           gui_only=False, layout='horizontal', labels=False)
-            children_pop_protocol.insert(0, image_calibration_children)
+            #children_pop_protocol.insert(0, image_calibration_children)
             children_pop_protocol.insert(1, gaussian_blur_children_pop)
             children_pop_protocol.insert(2, threshold_children)
             children_pop_protocol.insert(3, distance_map_children_pop)
             children_pop_protocol.insert(4, show_seeds_children_pop)
             children_pop_protocol.insert(5, watershed_children_pop)
 
-            dock_widgets.insert(0,parent_pop_protocol)
-            dock_widgets.insert(1,children_pop_protocol)
-
             parent_children_container=Container(name='Parent-Child segmentation', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='vertical', labels=False)
             parent_children_container.insert(0,parent_pop_protocol)
             parent_children_container.insert(1,children_pop_protocol)
+
+            relate_and_measure_container=Container(name='  ', annotation=None, label=None, visible=True, enabled=True,
+                                         gui_only=False, layout='vertical', labels=False)
+            relate_and_measure_container.insert(0,relate_and_measure)
+
+
             dock_widgets.insert(0, parent_children_container)
-            dock_widgets.insert(1, relate_and_measure)
+            dock_widgets.insert(1, relate_and_measure_container)
 
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
 
@@ -537,9 +547,9 @@ def save_protocol(self):
         protocols_file.close()
 
 ### Add here new functionalities for ZELDA ###
-#@magicgui(layout="vertical")
-#def new_functionality_widget(viewer: 'napari.Viewer'):
-#                   ...
-#
+### @magicgui(layout="vertical")
+### def new_functionality_widget(viewer: 'napari.Viewer'):
+###                   ...
+###
 
 ### End ###
