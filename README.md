@@ -26,17 +26,17 @@ https://napari.org/docs/plugins/index.html
 2. Segment two populations in 2D/3D (e.g. cells and organelles, nuclei and nuclear spots, tissue structures and cells) establishing the "Parent-Child" relation: count how many mitochondria are contained in each cell, how many spots localize in every nucleus, how many cells are within a tissue compartment.
 
   Example: cell cytoplasms (parent objects) and mitochondria (child objects)
-  ![](/docs/2D-AF488.png) <br> **Actin** | ![](/docs/2D-MT.png) <br> **Mitochondria**| ![](/docs/2D-AF488_MT.png) <br> **Merge**
+  ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-AF488.png) <br> **Actin** | ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT.png) <br> **Mitochondria**| ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-AF488_MT.png) <br> **Merge**
   ------ | ------| -----
-  ![](/docs/2D-AF488_parents.png) <br> **Parent cell cytoplasms** | ![](/docs/2D-MT_children.png) <br> **Children mitochondria**| ![](/docs/2D-MT_childrenbyParent.png) <br> **Children labelled by Parents**
+  ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-AF488_parents.png) <br> **Parent cell cytoplasms** | ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT_children.png) <br> **Children mitochondria**| ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT_childrenbyParent.png) <br> **Children labelled by Parents**
 
 
 3. Plot results within napari interface.
 
-    ![](/docs/Plot_hist_Area.png) <br> **Histogram** | ![](/docs/Plot_scatter_Area-EqDiam.png) <br> **Scatterplot**|
+    ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Plot_hist_Area.png) <br> **Histogram** | ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Plot_scatter_Area-EqDiam.png) <br> **Scatterplot**|
     ------ | ------|
 4. Customize an image analysis workflow in graphical mode (no scripting knowledge required).
-  ![](/docs/CustomProtocol.png) <br> **Custom image analysis workflow** |
+  ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/CustomProtocol.png) <br> **Custom image analysis workflow** |
   ------ |
 
 
@@ -47,7 +47,6 @@ https://napari.org/docs/plugins/index.html
     conda create -y -n napari-env python==3.8  
     conda activate napari-env  
     pip install "napari[all]"  
-    pip install napari!=0.4.11  
     pip install napari-zelda  
 
 
@@ -57,16 +56,16 @@ https://napari.org/docs/plugins/index.html
 
 **Option C.** Another option is to use the napari interface to install it (make sure napari!=0.4.11):
 1. Plugins / Install/Uninstall Package(s)
-![](/docs/Clipboard_ZELDA_Plugin_install_in_napari.png)
+![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_in_napari.png)
 
 2. Choose ZELDA
-![](/docs/Clipboard_ZELDA_Plugin_install_ZELDA_in_napari_Arrow.png)
+![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_ZELDA_in_napari_Arrow.png)
 
 3. ZELDA is installed
-![](/docs/Clipboard_ZELDA_Plugin_installed_ZELDA_in_napari_Arrow.png)
+![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_installed_ZELDA_in_napari_Arrow.png)
 
 4. Launch ZELDA
-![](/docs/Clipboard_ZELDA_Launch_ZELDA.png)
+![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Launch_ZELDA.png)
 
 
 ## Contributing
