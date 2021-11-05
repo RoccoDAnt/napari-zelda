@@ -152,27 +152,28 @@ def show_seeds_one_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, mask:
     if DistanceMap:
         coords = skimage.feature.peak_local_max(DistanceMap.data, labels=mask.data, min_distance=min_dist)
         points = np.array(coords)
-        viewer.add_points(points, name='Maxima at dist_min='+str(min_dist)+' of '+str(DistanceMap.name), size=3)
+        viewer.add_points(points*DistanceMap.scale, name='Maxima at dist_min='+str(min_dist)+' of '+str(DistanceMap.name), size=3)
 
 @magicgui(label={'widget_type':'Label', 'label':"Show seeds - Parents"}, call_button="Show seeds", persist=True)
 def show_seeds_parent_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, mask: Image, min_dist: int=1)-> napari.types.ImageData:
     if DistanceMap:
         coords = skimage.feature.peak_local_max(DistanceMap.data, labels=mask.data, min_distance=min_dist)
         points = np.array(coords)
-        viewer.add_points(points, name='Maxima at dist_min='+str(min_dist)+' of '+str(DistanceMap.name), size=3)
+        viewer.add_points(points*DistanceMap.scale, name='Maxima at dist_min='+str(min_dist)+' of '+str(DistanceMap.name), size=3)
 
 @magicgui(label={'widget_type':'Label', 'label':"Show seeds - Children"}, call_button="Show seeds", persist=True)
 def show_seeds_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, mask: Image, min_dist: int=1)-> napari.types.ImageData:
     if DistanceMap:
         coords = skimage.feature.peak_local_max(DistanceMap.data, labels=mask.data, min_distance=min_dist)
         points = np.array(coords)
-        viewer.add_points(points, name='Maxima at dist_min='+str(min_dist)+' of '+str(DistanceMap.name), size=3)
+        viewer.add_points(points*DistanceMap.scale, name='Maxima at dist_min='+str(min_dist)+' of '+str(DistanceMap.name), size=3)
 
 @magicgui(label={'widget_type':'Label', 'label':"Segment"}, call_button="Watershed", persist=True)
 def watershed_one_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, binary: Image, seeds: Points)-> napari.types.ImageData:
     if DistanceMap:
         mask = np.zeros(DistanceMap.data.shape, dtype=bool)
-        mask[tuple(seeds.data.T)] = True
+        seeds=np.array((np.reciprocal(DistanceMap.scale)*seeds.data).astype(int))
+        mask[tuple((seeds).T)] = True
         markers, _ = ndimage.label(mask)
         labels = skimage.segmentation.watershed(-DistanceMap.data, markers, mask=binary.data)
         viewer.add_image(labels, scale=DistanceMap.scale, rgb=False, name='Labelled objects', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
@@ -181,7 +182,8 @@ def watershed_one_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, binary
 def watershed_parent_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, binary: Image, seeds: Points)-> napari.types.ImageData:
     if DistanceMap:
         mask = np.zeros(DistanceMap.data.shape, dtype=bool)
-        mask[tuple(seeds.data.T)] = True
+        seeds=np.array((np.reciprocal(DistanceMap.scale)*seeds.data).astype(int))
+        mask[tuple((seeds).T)] = True
         markers, _ = ndimage.label(mask)
         labels = skimage.segmentation.watershed(-DistanceMap.data, markers, mask=binary.data)
         viewer.add_image(labels, scale=DistanceMap.scale, rgb=False, name='Labelled Parent objects', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
@@ -190,7 +192,8 @@ def watershed_parent_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, bin
 def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, binary: Image, seeds: Points)-> napari.types.ImageData:
     if DistanceMap:
         mask = np.zeros(DistanceMap.data.shape, dtype=bool)
-        mask[tuple(seeds.data.T)] = True
+        seeds=np.array((np.reciprocal(DistanceMap.scale)*seeds.data).astype(int))
+        mask[tuple((seeds).T)] = True
         markers, _ = ndimage.label(mask)
         labels = skimage.segmentation.watershed(-DistanceMap.data, markers, mask=binary.data)
         viewer.add_image(labels, scale=DistanceMap.scale, rgb=False, name='Labelled Children objects', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
@@ -430,7 +433,7 @@ def launch_ZELDA(
         if dropdown == 'Segment two populations and relate':
             parent_pop_protocol=Container(name='', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='horizontal', labels=False)
-            #parent_pop_protocol.insert(0, image_calibration_parents)
+            parent_pop_protocol.insert(0, image_calibration_parents)
             parent_pop_protocol.insert(1, gaussian_blur_parent_pop)
             parent_pop_protocol.insert(2, threshold_parents)
             parent_pop_protocol.insert(3, distance_map_parent_pop)
@@ -439,7 +442,7 @@ def launch_ZELDA(
 
             children_pop_protocol=Container(name=' ', annotation=None, label=None, visible=True, enabled=True,
                                           gui_only=False, layout='horizontal', labels=False)
-            #children_pop_protocol.insert(0, image_calibration_children)
+            children_pop_protocol.insert(0, image_calibration_children)
             children_pop_protocol.insert(1, gaussian_blur_children_pop)
             children_pop_protocol.insert(2, threshold_children)
             children_pop_protocol.insert(3, distance_map_children_pop)
