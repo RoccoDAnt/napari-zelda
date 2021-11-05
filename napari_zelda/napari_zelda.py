@@ -205,8 +205,11 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
             )
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     properties=measure.regionprops_table(labels.data, original.data,
-               properties= ['area', 'mean_intensity','equivalent_diameter'])
-    prop={'Area': properties['area']*np.prod(original.scale),'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity']}
+               properties= ['area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length','feret_diameter_max'])
+    prop={'Area': properties['area']*np.prod(original.scale),'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
+    'Min_Intensity': properties['min_intensity'], 'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*original.scale[-1],
+    'MinorAxis_Length': properties['minor_axis_length']*original.scale[-1], 'FeretDiameter_Max': properties['feret_diameter_max']*original.scale[-1]
+    }
     #prop_df=pd.DataFrame(prop)
     prop_df=dt.Frame(prop) #datatable instead of pandas
     prop_df.to_csv(str(save_to)+'\Results.csv')
@@ -227,13 +230,17 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
             )
 def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Children_labels: Image, Original_to_measure: Image, save_to_path):
     properties=measure.regionprops_table(Children_labels.data, Original_to_measure.data,
-               properties= ['label','area', 'mean_intensity','equivalent_diameter'])
+               properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length','feret_diameter_max'])
     binary_ch=Children_labels.data>0
     corresponding_parents=Parents_labels.data*binary_ch
     viewer.add_image(corresponding_parents, scale=Parents_labels.scale, rgb=False, name='Labelled children objects by parent', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
 
     properties_CorrespondingParent=measure.regionprops_table(Children_labels.data, Parents_labels.data, properties=['max_intensity'])
-    prop={'Parent_label': properties_CorrespondingParent['max_intensity'],'Area': properties['area']*np.prod(Original_to_measure.scale),'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity']}
+    prop={'Parent_label': properties_CorrespondingParent['max_intensity'].to_numpy(float),'Area': properties['area']*np.prod(Original_to_measure.scale),
+    'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity'],'Min_Intensity': properties['min_intensity'],
+    'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*Original_to_measure.scale[-1],
+    'MinorAxis_Length': properties['minor_axis_length']*Original_to_measure.scale[-1],'FeretDiameter_Max': properties['feret_diameter_max']*Original_to_measure.scale[-1]
+    }
     #prop_df=pd.DataFrame(prop)
     prop_df=dt.Frame(prop) #datatable instead of pandas
     prop_df.to_csv(str(save_to_path)+'\Results_parents-children.csv')
@@ -256,9 +263,9 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
           plot_s={'widget_type':'CheckBox','name':'Scatterplot','text':'Scatterplot'},
           save_plots={'widget_type':'CheckBox','name':'Save_plots','text':'Save plots'},
           saveTo_path={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
-          histogram={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter')},
-          scatterplot_X={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter')},
-          scatterplot_Y={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter')},
+          histogram={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','FeretDiameter_Max','Parent_label')},
+          scatterplot_X={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','FeretDiameter_Max','Parent_label')},
+          scatterplot_Y={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','FeretDiameter_Max','Parent_label')},
           persist=True,
           call_button="Plot",
           result_widget=False
@@ -279,7 +286,7 @@ def results_widget(viewer: 'napari.Viewer',
     if plot_h== True:
         plot_widget_histogram = FigureCanvas(Figure(figsize=(2, 1.5), dpi=150))
         ax = plot_widget_histogram.figure.subplots()
-        ax.set(xlim=(0, 10*np.median(table[str(histogram)])), ylim=(0, table.nrows))
+        ax.set(xlim=(0, 5*np.median(table[str(histogram)])), ylim=(0, table.nrows))
         ax.set_title('Histogram of '+histogram, color='gray')
         ax.set_xlabel(str(histogram))
         ax.set_ylabel('Counts')
@@ -293,7 +300,7 @@ def results_widget(viewer: 'napari.Viewer',
     if plot_s== True:
         plot_widget_scattering = FigureCanvas(Figure(figsize=(2, 1.5), dpi=150))
         ax = plot_widget_scattering.figure.subplots()
-        ax.set(xlim=(0, 10*np.median(table[str(scatterplot_X)])), ylim=(0, 10*np.median(table[str(scatterplot_Y)])))
+        ax.set(xlim=(0, 5*np.median(table[str(scatterplot_X)])), ylim=(0, 5*np.median(table[str(scatterplot_Y)])))
         ax.set_title('Scatterplot of '+str(scatterplot_X)+' vs '+str(scatterplot_Y), color='gray')
         ax.set_xlabel(str(scatterplot_X))
         ax.set_ylabel(str(scatterplot_Y))
