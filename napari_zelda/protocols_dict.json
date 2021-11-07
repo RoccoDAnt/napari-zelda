@@ -27,6 +27,13 @@
                 "step_number": 1,
                 "step_name": "prot_4"
             }
+        },
+        {
+            "name": "Import and Export Protocols",
+            "steps": {
+                "step_number": 1,
+                "step_name": "prot_5"
+            }
         }
     ]
 }

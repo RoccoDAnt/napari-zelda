@@ -11,7 +11,7 @@ try:
     from napari.settings import SETTINGS
 except ImportError:
     print("Warning: import of napari.settings failed - 'save window geometry' option will not be used")
-from magicgui.widgets import SpinBox, FileEdit, Slider, FloatSlider, Label, Container, MainWindow, ComboBox, TextEdit, PushButton, ProgressBar
+from magicgui.widgets import SpinBox, FileEdit, Slider, FloatSlider, Label, Container, MainWindow, ComboBox, TextEdit, PushButton, ProgressBar, Select
 import skimage
 import skimage.filters
 from skimage.feature import peak_local_max
@@ -53,6 +53,7 @@ corresponding_widgets={
                         "Watershed":"watershed_one_pop",
                         "Measure": "measure_one_pop",
                         "Plot": "results_widget",
+                        "Image Calibration": "image_calibration"
                         }
 
 protocols_description=open(os.path.join(prot_path,'napari_zelda','protocols_description.txt'), 'r').read()
@@ -344,6 +345,74 @@ def image_calibration_children(viewer: 'napari.Viewer', label, layer: Image, xy:
         scale=[int(z/xy), xy, xy]
         layer.scale=scale[-layer.ndim:]
 
+@magicgui(label={'widget_type':'Label', 'label':"Import/Export Protocols"}, layout="vertical",
+          Import_protocols_from={'widget_type': 'FileEdit', 'value':'Documents\ZELDA\protocols_dict.json', 'mode':'r','filter':'*.json'},
+          Export_protocols_to={'widget_type': 'FileEdit', 'value':'Documents\ZELDA\exported_protocols_dict.json', 'mode':'w', 'filter':'*.json'},
+          persist=True,
+          call_button="Import list",
+          result_widget=False
+          )
+def protocol_exchange_widget(viewer: 'napari.Viewer', label, Import_protocols_from, Export_protocols_to):
+    existing_protocols_file=open(os.path.join(prot_path,'napari_zelda','protocols_dict.json'), "rb")
+    existing_protocols_json = json.load(existing_protocols_file)
+
+    existing_protocols=list()
+    for i in range(0,len(existing_protocols_json['Protocols'])):
+        existing_protocols.append(existing_protocols_json['Protocols'][i]['name'])
+    existing_protocols_file.seek(0)
+    existing_protocols_file.close()
+    ProtocolList=Select(label='Selected_protocols', choices=existing_protocols)
+
+    SaveProtFile=PushButton(name='Append Protocol to File', annotation=None, label=None, tooltip='Save the selected Protocol in the new file', visible=True, enabled=True, gui_only=False, text='Save Protocols', value=0)
+
+    Log=Label(value='', visible=False)
+
+    ExpProt_container = Container()
+    ExpProt_container.show()
+
+    ExpProt_container.insert(0, ProtocolList)
+    ExpProt_container.insert(1, SaveProtFile)
+    ExpProt_container.insert(2, Log)
+
+
+    protocol_exchange_widget.insert(4, ExpProt_container)
+
+    SaveProtFile.changed.connect(save_protocols_to_file(ProtocolList))
+
+
+def save_protocols_to_file(ProtocolList):
+        imported_protocols_file=open(os.path.abspath(str(protocol_exchange_widget.Import_protocols_from.value)), "rb")
+        imported_protocols_json = json.load(imported_protocols_file)
+        imported_protocols_file.seek(0)
+        imported_protocols_file.close()
+
+
+        existing_protocols_file=open(os.path.join(prot_path,'napari_zelda','protocols_dict.json'), "rb")
+        export_protocols_json = json.load(existing_protocols_file)
+        existing_protocols_file.seek(0)
+        existing_protocols_file.close()
+
+        if os.stat(protocol_exchange_widget.Export_protocols_to.value).st_size == 0:
+            export_protocols_file=open(os.path.abspath(protocol_exchange_widget.Export_protocols_to.value), "w+")
+
+            for i in range(0,len(export_protocols_json['Protocols'])-1):
+                del export_protocols_json['Protocols'][0]
+        elif os.stat(protocol_exchange_widget.Export_protocols_to.value).st_size > 0:
+            export_protocols_file=open(os.path.abspath(protocol_exchange_widget.Export_protocols_to.value), "r+")
+
+        for i in range(0,len(imported_protocols_json['Protocols'])):
+            new_json_entry=imported_protocols_json['Protocols'][i]
+            export_protocols_json["Protocols"].append(new_json_entry)
+        del export_protocols_json['Protocols'][0]
+
+        json.dump(export_protocols_json, export_protocols_file, indent = 4)
+        export_protocols_file.seek(0)
+        export_protocols_file.close()
+
+        #protocol_exchange_widget.Log.visible=True
+        #protocol_exchange_widget.Log.value = 'Protocols exported'
+
+
 @magic_factory(
                auto_call=False,
                call_button=True,
@@ -487,7 +556,14 @@ def launch_ZELDA(
 
             launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
 
-        if (protocols.index(dropdown)>3):
+        if dropdown == 'Import and Export Protocols':
+            new_protocol=Container(name='Import and Export Protocols', annotation=None, label=None, visible=True, enabled=True,
+                                          gui_only=False, layout='horizontal', labels=False)
+            new_protocol.insert(0, protocol_exchange_widget)
+            dock_widgets.insert(0, new_protocol)
+            launch_ZELDA._call_button.text = 'Restart with the selected Protocol'
+
+        if (protocols.index(dropdown)>4):
             custom_panel=Container(name='Custom Protocol: "'+dropdown+'"', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='horizontal', labels=False)
 
