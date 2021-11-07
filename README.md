@@ -42,8 +42,8 @@ The images shown above are available in the [**docs**](https://github.com/RoccoD
 
 For small monitors it may be convenient to float the protocol panel
 
-  ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin-set_panel_to_float.png) <br> **Float a panel in napari** |
-    ------ |
+  |![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin-set_panel_to_float.png) <br> **Float a panel in napari** |
+  ------ |
 
 3. Plot results within napari interface.
 
