@@ -328,7 +328,7 @@ def image_calibration(viewer: 'napari.Viewer', label, layer: Image, xy: float = 
 @magicgui(
          xy={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001, 'label':'pixel size (um)'},
          z={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001 , 'label':'z (um)'},
-         label={'widget_type':'Label', 'label':"Imgage calibration parents"},
+         label={'widget_type':'Label', 'label':"Image calibration parents"},
          call_button="Apply"
          )
 def image_calibration_parents(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
@@ -339,7 +339,7 @@ def image_calibration_parents(viewer: 'napari.Viewer', label, layer: Image, xy: 
 @magicgui(
          xy={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001, 'label':'pixel size (um)'},
          z={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001 , 'label':'z (um)'},
-         label={'widget_type':'Label', 'label':"Imgage calibration children"},
+         label={'widget_type':'Label', 'label':"Image calibration children"},
          call_button="Apply"
          )
 def image_calibration_children(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
