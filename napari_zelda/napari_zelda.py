@@ -218,7 +218,7 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     prop_df.to_csv(str(save_to)+'\Results.csv')
 
     log=Label(name='Log', tooltip=None)
-    log.value="-> Th="+str(threshold_one_pop.threshold.value)+"-> GB: sigma="+str(gaussian_blur_one_pop.sigma.value)+"-> DistMap"
+    log.value="-> GB: sigma="+str(gaussian_blur_one_pop.sigma.value)+"-> Th="+str(threshold_one_pop.threshold.value)+"-> DistMap"
     log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_one_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects"
     measure_one_pop.insert(4,log)
 
@@ -249,9 +249,9 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     prop_df.to_csv(str(save_to_path)+'\Results_parents-children.csv')
 
     log=Label(name='Log', tooltip=None)
-    log.value="-> Th_parents="+str(threshold_parents.threshold.value)+"-> GB: sigma="+str(gaussian_blur_parent_pop.sigma.value)+"-> DistMap"
+    log.value="-> GB: sigma="+str(gaussian_blur_parent_pop.sigma.value)+"-> Th_parents="+str(threshold_parents.threshold.value)+"-> DistMap"
     log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_parent_pop.min_dist.value) + " -> Found n="+str( np.max(prop_df['Parent_label'].to_numpy(), axis=0) )+ " objects"
-    log.value=log.value+"\n-> Th_children="+str(threshold_children.threshold.value)+"-> GB: sigma="+str(gaussian_blur_children_pop.sigma.value)+"-> DistMap"
+    log.value=log.value+"\n-> GB: sigma="+str(gaussian_blur_children_pop.sigma.value)+"-> Th_children="+str(threshold_children.threshold.value)+"-> DistMap"
     log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_children_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects"
     measure_one_pop.insert(4,log)
 

@@ -7,7 +7,10 @@
 [![codecov](https://codecov.io/gh/RoccoDAnt/napari-zelda/branch/master/graph/badge.svg)](https://codecov.io/gh/RoccoDAnt/napari-zelda)
 
 ## ZELDA: a 3D Image Segmentation and Parent-Child relation plugin for microscopy image analysis in napari
-##### Authors: Rocco D'Antuono, Giuseppina Pisignano
+#### Authors: Rocco D'Antuono, Giuseppina Pisignano
+
+###### Preprint: [https://www.biorxiv.org/content/10.1101/2021.10.24.465596v1](https://www.biorxiv.org/content/10.1101/2021.10.24.465596v1)
+###### Examples of 2D and 3D data sets: [https://doi.org/10.5281/zenodo.5651284](https://zenodo.org/record/5651284#.YYgn_WDP2Ch)
 ----------------------------------
 
 This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [cookiecutter-napari-plugin] template.
@@ -30,6 +33,17 @@ https://napari.org/docs/plugins/index.html
   ------ | ------| -----
   ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-AF488_parents.png) <br> **Parent cell cytoplasms** | ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT_children.png) <br> **Children mitochondria**| ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT_childrenbyParent.png) <br> **Children labelled by Parents**
 
+The images shown above are available in the [**docs**](https://github.com/RoccoDAnt/napari-zelda/tree/main/docs) folder of this repository and were segmented using ZELDA with the following parameters:
+
+
+   | **Parent objects** | **GB: sigma=2.0-> Th_parents=60.0-> DistMap-> Maxima: min_dist=10** |
+   | -----|  ----|
+   | **Children objects** | **GB: sigma=0.3-> Th_children=450.0 -> DistMap-> Maxima: min_dist=2**|
+
+For small monitors it may be convenient to float the protocol panel
+
+    | ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin-set_panel_to_float.png) |
+    ------ |
 
 3. Plot results within napari interface.
 
@@ -62,7 +76,8 @@ https://napari.org/docs/plugins/index.html
 
 **Option C.** Another option is to use the napari interface to install it (make sure napari!=0.4.11):
 1. Plugins / Install/Uninstall Package(s)
-![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_in_napari.png)
+
+  ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_in_napari.png)
 
 2. Choose ZELDA
 ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_ZELDA_in_napari_Arrow.png)
@@ -78,6 +93,19 @@ https://napari.org/docs/plugins/index.html
 
 Contributions are welcome. Tests can be run with [tox], please ensure
 the coverage at least stays the same before you submit a pull request.
+
+Users can add new protocol steps to their local installation using magicgui widgets.
+Code can be added at the end of napari_zelda.py file:
+
+>###Add here new functionalities for ZELDA ###
+>###@magicgui(layout="vertical")
+>###def new_functionality_widget(viewer: 'napari.Viewer'):
+>###...
+>###
+>
+>###End###
+
+
 
 ## License
 

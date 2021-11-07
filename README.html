@@ -28,7 +28,9 @@
 <a href="https://github.com/RoccoDAnt/napari-zelda/actions"><img src="https://github.com/RoccoDAnt/napari-zelda/workflows/tests/badge.svg" alt="tests"></a>
 <a href="https://codecov.io/gh/RoccoDAnt/napari-zelda"><img src="https://codecov.io/gh/RoccoDAnt/napari-zelda/branch/master/graph/badge.svg" alt="codecov"></a></p>
 <h2 id="zelda-a-3d-image-segmentation-and-parent-child-relation-plugin-for-microscopy-image-analysis-in-napari">ZELDA: a 3D Image Segmentation and Parent-Child relation plugin for microscopy image analysis in napari</h2>
-<h5 id="authors-rocco-d-antuono-giuseppina-pisignano">Authors: Rocco D&apos;Antuono, Giuseppina Pisignano</h5>
+<h4 id="authors-rocco-d-antuono-giuseppina-pisignano">Authors: Rocco D&apos;Antuono, Giuseppina Pisignano</h4>
+<h6 id="preprint-https-www-biorxiv-org-content-10-1101-2021-10-24-465596v1">Preprint: <a href="https://www.biorxiv.org/content/10.1101/2021.10.24.465596v1">https://www.biorxiv.org/content/10.1101/2021.10.24.465596v1</a></h6>
+<h6 id="examples-of-2d-and-3d-data-sets-https-doi-org-10-5281-zenodo-5651284">Examples of 2D and 3D data sets: <a href="https://zenodo.org/record/5651284#.YYgn_WDP2Ch">https://doi.org/10.5281/zenodo.5651284</a></h6>
 <hr>
 <p>This <a href="https://github.com/napari/napari">napari</a> plugin was generated with <a href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> using with <a href="https://github.com/napari">@napari</a>&apos;s <a href="https://github.com/napari/cookiecutter-napari-plugin">cookiecutter-napari-plugin</a> template.</p>
 <!--
@@ -50,7 +52,22 @@ https://napari.org/docs/plugins/index.html
 <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-AF488_parents.png" alt> <br> <strong>Parent cell cytoplasms</strong> | <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT_children.png" alt> <br> <strong>Children mitochondria</strong>| <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/2D-MT_childrenbyParent.png" alt> <br> <strong>Children labelled by Parents</strong></p>
 </li>
 </ol>
-<ol start="3">
+<p>The images shown above are available in the <a href="https://github.com/RoccoDAnt/napari-zelda/tree/main/docs"><strong>docs</strong></a> folder of this repository and were segmented using ZELDA with the following parameters:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Parent objects</strong></th>
+<th><strong>GB: sigma=2.0-&gt; Th_parents=60.0-&gt; DistMap-&gt; Maxima: min_dist=10</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Children objects</strong></td>
+<td><strong>GB: sigma=0.3-&gt; Th_children=450.0 -&gt; DistMap-&gt; Maxima: min_dist=2</strong></td>
+</tr>
+</tbody></table>
+<p>For small monitors it may be convenient to float the protocol panel</p>
+<pre><code>| ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin-set_panel_to_float.png) |
+------ |</code></pre><ol start="3">
 <li><p>Plot results within napari interface.</p>
 <p> <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Plot_hist_Area.png" alt> <br> <strong>Histogram</strong> | <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Plot_scatter_Area-EqDiam.png" alt> <br> <strong>Scatterplot</strong>|
  ------ | ------|</p>
@@ -72,8 +89,8 @@ pip install &quot;napari[all]&quot;
 pip install napari-zelda  </code></pre><p><strong>Option B.</strong> Alternatively, clone the repository and install locally via <a href="https://pypi.org/project/pip/">pip</a>:</p>
 <pre><code>pip install -e .</code></pre><p><strong>Option C.</strong> Another option is to use the napari interface to install it (make sure napari!=0.4.11):</p>
 <ol>
-<li><p>Plugins / Install/Uninstall Package(s)
-<img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_in_napari.png" alt></p>
+<li><p>Plugins / Install/Uninstall Package(s)</p>
+<p><img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_in_napari.png" alt></p>
 </li>
 <li><p>Choose ZELDA
 <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_ZELDA_in_napari_Arrow.png" alt></p>
@@ -88,6 +105,16 @@ pip install napari-zelda  </code></pre><p><strong>Option B.</strong> Alternative
 <h2 id="contributing">Contributing</h2>
 <p>Contributions are welcome. Tests can be run with <a href="https://tox.readthedocs.io/en/latest/">tox</a>, please ensure
 the coverage at least stays the same before you submit a pull request.</p>
+<p>Users can add new protocol steps to their local installation using magicgui widgets.
+Code can be added at the end of napari_zelda.py file:</p>
+<blockquote>
+<p>###Add here new functionalities for ZELDA ###</p>
+<p>###@magicgui(layout=&quot;vertical&quot;)</p>
+<p>###def new_functionality_widget(viewer: &apos;napari.Viewer&apos;):</p>
+<p>###...</p>
+<p>###</p>
+<p>###End###</p>
+</blockquote>
 <h2 id="license">License</h2>
 <p>Distributed under the terms of the <a href="http://opensource.org/licenses/BSD-3-Clause">BSD-3</a> license,
 &quot;napari-zelda&quot; is free and open source software</p>
