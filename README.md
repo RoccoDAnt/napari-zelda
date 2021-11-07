@@ -98,9 +98,13 @@ Users can add new protocol steps to their local installation using magicgui widg
 Code can be added at the end of napari_zelda.py file:
 
 >###Add here new functionalities for ZELDA ###
+>
 >###@magicgui(layout="vertical")
+>
 >###def new_functionality_widget(viewer: 'napari.Viewer'):
+>
 >###...
+>
 >###
 >
 >###End###
