@@ -38,8 +38,8 @@ https://napari.org/docs/plugins/index.html
 
 4. Customize an image analysis workflow in graphical mode (no scripting knowledge required).
 
-  | ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/CustomProtocol.png) <br> **Custom image analysis workflow**|
-    ------ |
+  | ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/CustomProtocol.png) <br> **Custom image analysis workflow** |
+  ------ |
 
 5. Import and Export Protocols (image analysis workflows) in graphical mode (share with the community!).
 
