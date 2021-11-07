@@ -239,7 +239,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     viewer.add_image(corresponding_parents, scale=Parents_labels.scale, rgb=False, name='Labelled children objects by parent', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
 
     properties_CorrespondingParent=measure.regionprops_table(Children_labels.data, Parents_labels.data, properties=['max_intensity'])
-    prop={'Parent_label': properties_CorrespondingParent['max_intensity'].to_numpy(float),'Area': properties['area']*np.prod(Original_to_measure.scale),
+    prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(np.float),'Area': properties['area']*np.prod(Original_to_measure.scale),
     'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity'],'Min_Intensity': properties['min_intensity'],
     'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*Original_to_measure.scale[-1],
     'MinorAxis_Length': properties['minor_axis_length']*Original_to_measure.scale[-1],'FeretDiameter_Max': properties['feret_diameter_max']*Original_to_measure.scale[-1]
@@ -466,7 +466,7 @@ def launch_ZELDA(
         gaussian_blur_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         threshold_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         distance_map_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
-        show_seeds_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        show_seeds_one_pop.native.setMaximumWidth(bigWidget_maxWidth)
         watershed_one_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         measure_one_pop.native.setMaximumWidth(bigWidget_maxWidth)
         results_widget.native.setMaximumWidth(hugeWidget_maxWidth)
