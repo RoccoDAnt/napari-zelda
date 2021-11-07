@@ -43,3 +43,10 @@ A custom-made image analysis protocol can be assembled using the available funct
 4. Assign a function to execute at each step
 5. Save the new protocol
 The new protocol will be available in the drop-down menu after restarting napari.
+
+- "Import and Export Protocols".
+Custom protocols can be imported/exported and exchanged with the community in few clicks.
+1. Choose a .json file containing the current protocols.
+2. Choose a destination .json file
+3. Protocols will be appended to the existing destination file, or a new file will be created.
+4. You new .json file will contain your protocols, so they can be exchanged with the community.

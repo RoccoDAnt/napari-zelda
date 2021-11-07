@@ -13,6 +13,7 @@ except ImportError:
     print("Warning: import of napari.settings failed - 'save window geometry' option will not be used")
 from magicgui.widgets import SpinBox, FileEdit, Slider, FloatSlider, Label, Container, MainWindow, ComboBox, TextEdit, PushButton, ProgressBar, Select
 import skimage
+import skimage.morphology
 import skimage.filters
 from skimage.feature import peak_local_max
 from skimage.transform import rotate
@@ -53,7 +54,8 @@ corresponding_widgets={
                         "Watershed":"watershed_one_pop",
                         "Measure": "measure_one_pop",
                         "Plot": "results_widget",
-                        "Image Calibration": "image_calibration"
+                        "Image Calibration": "image_calibration",
+                        "Morphological Operation":"morphological_operation"
                         }
 
 protocols_description=open(os.path.join(prot_path,'napari_zelda','protocols_description.txt'), 'r').read()
@@ -345,6 +347,25 @@ def image_calibration_children(viewer: 'napari.Viewer', label, layer: Image, xy:
         scale=[int(z/xy), xy, xy]
         layer.scale=scale[-layer.ndim:]
 
+
+@magicgui(label={'widget_type':'Label', 'label':"Morphological Operation"},
+          Operation={'widget_type':'ComboBox', 'label':"Morphological Operation", 'choices':['Erosion','Dilation','Opening','Closing']},
+          call_button="Process",
+          persist=True)
+def morphological_operation(viewer: 'napari.Viewer', label, Operation, Original: Image, element_size: int=1)-> napari.types.ImageData:
+    if Original:
+        selem = skimage.morphology.disk(element_size)
+        if Operation == 'Erosion':
+            morph_processed = skimage.morphology.erosion(Original.data, selem)
+        elif Operation == 'Dilation':
+            morph_processed = skimage.morphology.dilation(Original.data, selem)
+        elif Operation == 'Opening':
+            morph_processed = skimage.morphology.opening(Original.data, selem)
+        elif Operation == 'Closing':
+            morph_processed = skimage.morphology.closing(Original.data, selem)
+        viewer.add_image(morph_processed, scale=Original.scale, rgb=False, name=''+str(Original.name)+'_'+str(Operation)+' of '+str(element_size)+'', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
+
+
 @magicgui(label={'widget_type':'Label', 'label':"Import/Export Protocols"}, layout="vertical",
           Import_protocols_from={'widget_type': 'FileEdit', 'value':'Documents\ZELDA\protocols_dict.json', 'mode':'r','filter':'*.json'},
           Export_protocols_to={'widget_type': 'FileEdit', 'value':'Documents\ZELDA\exported_protocols_dict.json', 'mode':'w', 'filter':'*.json'},
@@ -567,7 +588,7 @@ def launch_ZELDA(
             custom_panel=Container(name='Custom Protocol: "'+dropdown+'"', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='horizontal', labels=False)
 
-            steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap','Measure','Plot']
+            steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operation']
             available_protocols=len(protocols)
             choosen_protocol=protocols.index(dropdown)
 
@@ -594,7 +615,7 @@ def new_protocol_widget(viewer: 'napari.Viewer',
                    np_steps,
                    Log
                    ):
-                   steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot']
+                   steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operation']
                    np_container=Container()
                    for k in range(0, np_steps):
                        np_container.insert(k, ComboBox(choices=steps_types, value=steps_types[0], label='Select step '+str(k+1)+':', name='step_'+str(k)+'', tooltip='Choose a function for this step of the custom protocol'))
