@@ -207,11 +207,10 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
           persist=True
             )
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
-    properties=measure.regionprops_table(labels.data, original.data,
-               properties= ['area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length','feret_diameter_max'])
+    properties=measure.regionprops_table(labels.data, original.data, properties= ['area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length'])
     prop={'Area': properties['area']*np.prod(original.scale),'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
     'Min_Intensity': properties['min_intensity'], 'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*original.scale[-1],
-    'MinorAxis_Length': properties['minor_axis_length']*original.scale[-1], 'FeretDiameter_Max': properties['feret_diameter_max']*original.scale[-1]
+    'MinorAxis_Length': properties['minor_axis_length']*original.scale[-1]
     }
     #prop_df=pd.DataFrame(prop)
     prop_df=dt.Frame(prop) #datatable instead of pandas
@@ -232,8 +231,8 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
           persist=True
             )
 def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Children_labels: Image, Original_to_measure: Image, save_to_path):
-    properties=measure.regionprops_table(Children_labels.data, Original_to_measure.data,
-               properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length','feret_diameter_max'])
+    properties=measure.regionprops_table(Children_labels.data, Original_to_measure.data, properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length']
+    )
     binary_ch=Children_labels.data>0
     corresponding_parents=Parents_labels.data*binary_ch
     viewer.add_image(corresponding_parents, scale=Parents_labels.scale, rgb=False, name='Labelled children objects by parent', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
@@ -242,7 +241,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(np.float),'Area': properties['area']*np.prod(Original_to_measure.scale),
     'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity'],'Min_Intensity': properties['min_intensity'],
     'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*Original_to_measure.scale[-1],
-    'MinorAxis_Length': properties['minor_axis_length']*Original_to_measure.scale[-1],'FeretDiameter_Max': properties['feret_diameter_max']*Original_to_measure.scale[-1]
+    'MinorAxis_Length': properties['minor_axis_length']*Original_to_measure.scale[-1]
     }
     #prop_df=pd.DataFrame(prop)
     prop_df=dt.Frame(prop) #datatable instead of pandas
@@ -250,7 +249,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
 
     log=Label(name='Log', tooltip=None)
     log.value="-> GB: sigma="+str(gaussian_blur_parent_pop.sigma.value)+"-> Th_parents="+str(threshold_parents.threshold.value)+"-> DistMap"
-    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_parent_pop.min_dist.value) + " -> Found n="+str( np.max(prop_df['Parent_label'].to_numpy(), axis=0) )+ " objects"
+    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_parent_pop.min_dist.value) + " -> Found n="+str( np.max(prop_df['Parent_label'].to_numpy()) )+ " objects"
     log.value=log.value+"\n-> GB: sigma="+str(gaussian_blur_children_pop.sigma.value)+"-> Th_children="+str(threshold_children.threshold.value)+"-> DistMap"
     log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_children_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects"
     measure_one_pop.insert(4,log)
@@ -266,9 +265,9 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
           plot_s={'widget_type':'CheckBox','name':'Scatterplot','text':'Scatterplot'},
           save_plots={'widget_type':'CheckBox','name':'Save_plots','text':'Save plots'},
           saveTo_path={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
-          histogram={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','FeretDiameter_Max','Parent_label')},
-          scatterplot_X={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','FeretDiameter_Max','Parent_label')},
-          scatterplot_Y={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','FeretDiameter_Max','Parent_label')},
+          histogram={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label')},
+          scatterplot_X={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label')},
+          scatterplot_Y={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label')},
           persist=True,
           call_button="Plot",
           result_widget=False
@@ -367,7 +366,7 @@ def morphological_operation(viewer: 'napari.Viewer', label, Operation, Original:
 
 
 @magicgui(label={'widget_type':'Label', 'label':"Import/Export Protocols"}, layout="vertical",
-          Import_protocols_from={'widget_type': 'FileEdit', 'value':'Documents\ZELDA\protocols_dict.json', 'mode':'r','filter':'*.json'},
+          Import_protocols_from={'widget_type': 'FileEdit', 'value':str(os.path.join(prot_path,'napari_zelda','protocols_dict.json')), 'mode':'r','filter':'*.json'},
           Export_protocols_to={'widget_type': 'FileEdit', 'value':'Documents\ZELDA\exported_protocols_dict.json', 'mode':'w', 'filter':'*.json'},
           persist=True,
           call_button="Import list",
@@ -398,10 +397,10 @@ def protocol_exchange_widget(viewer: 'napari.Viewer', label, Import_protocols_fr
 
     protocol_exchange_widget.insert(4, ExpProt_container)
 
-    SaveProtFile.changed.connect(save_protocols_to_file(ProtocolList))
+    SaveProtFile.changed.connect(save_protocols_to_file)
 
 
-def save_protocols_to_file(ProtocolList):
+def save_protocols_to_file(self):
         imported_protocols_file=open(os.path.abspath(str(protocol_exchange_widget.Import_protocols_from.value)), "rb")
         imported_protocols_json = json.load(imported_protocols_file)
         imported_protocols_file.seek(0)
@@ -413,12 +412,12 @@ def save_protocols_to_file(ProtocolList):
         existing_protocols_file.seek(0)
         existing_protocols_file.close()
 
-        if os.stat(protocol_exchange_widget.Export_protocols_to.value).st_size == 0:
+        if os.path.exists(protocol_exchange_widget.Export_protocols_to.value) == False:
             export_protocols_file=open(os.path.abspath(protocol_exchange_widget.Export_protocols_to.value), "w+")
 
             for i in range(0,len(export_protocols_json['Protocols'])-1):
                 del export_protocols_json['Protocols'][0]
-        elif os.stat(protocol_exchange_widget.Export_protocols_to.value).st_size > 0:
+        elif os.path.exists(protocol_exchange_widget.Export_protocols_to.value) == True:
             export_protocols_file=open(os.path.abspath(protocol_exchange_widget.Export_protocols_to.value), "r+")
 
         for i in range(0,len(imported_protocols_json['Protocols'])):
@@ -484,14 +483,14 @@ def launch_ZELDA(
         gaussian_blur_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         threshold_parents.native.setMaximumWidth(mediumWidget_maxWidth)
         distance_map_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
-        show_seeds_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
-        watershed_parent_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        show_seeds_parent_pop.native.setMaximumWidth(hugeWidget_maxWidth)
+        watershed_parent_pop.native.setMaximumWidth(bigWidget_maxWidth)
         image_calibration_children.native.setMaximumWidth(bigWidget_maxWidth)
         gaussian_blur_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
         threshold_children.native.setMaximumWidth(mediumWidget_maxWidth)
         distance_map_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
-        show_seeds_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
-        watershed_children_pop.native.setMaximumWidth(mediumWidget_maxWidth)
+        show_seeds_children_pop.native.setMaximumWidth(hugeWidget_maxWidth)
+        watershed_children_pop.native.setMaximumWidth(bigWidget_maxWidth)
         relate_and_measure.native.setMaximumWidth(hugeWidget_maxWidth)
 
         image_calibration_parents.native.setMaximumHeight(widgetHeight_small)
@@ -546,7 +545,7 @@ def launch_ZELDA(
             children_pop_protocol.insert(4, show_seeds_children_pop)
             children_pop_protocol.insert(5, watershed_children_pop)
 
-            parent_children_container=Container(name='Parent-Child segmentation', annotation=None, label=None, visible=True, enabled=True,
+            parent_children_container=Container(name='Segmentation', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='vertical', labels=False)
             parent_children_container.insert(0,parent_pop_protocol)
             parent_children_container.insert(1,children_pop_protocol)
