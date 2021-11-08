@@ -13,17 +13,10 @@
 ###### Examples of 2D and 3D data sets: [https://doi.org/10.5281/zenodo.5651284](https://zenodo.org/record/5651284#.YYgn_WDP2Ch)
 ----------------------------------
 
-This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [cookiecutter-napari-plugin] template.
-
-<!--
-Don't miss the full getting started guide to set up your new package:
-https://github.com/napari/cookiecutter-napari-plugin#getting-started
-
-and review the napari docs for plugin developers:
-https://napari.org/docs/plugins/index.html
--->
-
 ## What you can do with ZELDA plugin for napari
+The plugin can be used to analyze 2D/3D image data sets.  
+Multidimensional images (each channel corresponding to a napari layer) can be used to:
+
 1. Segment objects such as cells and organelles in 2D/3D.
 
 2. Segment two populations in 2D/3D (e.g. cells and organelles, nuclei and nuclear spots, tissue structures and cells) establishing the "Parent-Child" relation: count how many mitochondria are contained in each cell, how many spots localize in every nucleus, how many cells are within a tissue compartment.
@@ -88,13 +81,26 @@ For small monitors it may be convenient to float the protocol panel
 4. Launch ZELDA
 ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Launch_ZELDA.png)
 
+## Specifications
+
+This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [cookiecutter-napari-plugin] template.
+
+The GUI has been developed using [magicgui](https://github.com/napari/magicgui) widgets, while the image analysis and processing include functions from [scikit-image](https://scikit-image.org/), [SciPy](https://scipy.org/), and [NumPy](https://numpy.org/). Results are handled with [pandas](https://pandas.pydata.org/) and [datatable](https://datatable.readthedocs.io/en/latest/). Plots are obtained with [matplotlib](https://matplotlib.org/).  
+<!--
+Don't miss the full getting started guide to set up your new package:
+https://github.com/napari/cookiecutter-napari-plugin#getting-started
+
+and review the napari docs for plugin developers:
+https://napari.org/docs/plugins/index.html
+-->
+
 
 ## Contributing
 
 Contributions are welcome. Tests can be run with [tox], please ensure
 the coverage at least stays the same before you submit a pull request.
 
-Users can add new protocol steps to their local installation using magicgui widgets.
+Users can add new protocol steps to their local installation using [magicgui](https://github.com/napari/magicgui) widgets.
 Code can be added at the end of napari_zelda.py file:
 
 >###Add here new functionalities for ZELDA ###
