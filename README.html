@@ -80,12 +80,7 @@
 </li>
 </ol>
 <h2 id="installation">Installation</h2>
-<p><strong>Option A.</strong> You can install <code>napari-zelda</code> via <a href="https://pypi.org/project/pip/">pip</a>. For the best experience, create a conda environment and use napari!=0.4.11, using the following instructions:</p>
-<pre><code>conda create -y -n napari-env python==3.8  
-conda activate napari-env  
-pip install &quot;napari[all]&quot;  
-pip install napari-zelda  </code></pre><p><strong>Option B.</strong> Alternatively, clone the repository and install locally via <a href="https://pypi.org/project/pip/">pip</a>:</p>
-<pre><code>pip install -e .</code></pre><p><strong>Option C.</strong> Another option is to use the napari interface to install it (make sure napari!=0.4.11):</p>
+<p><strong>Option A.</strong> The easiest option is to use the napari interface to install ZELDA (make sure napari!=0.4.11):</p>
 <ol>
 <li><p>Plugins / Install/Uninstall Package(s)</p>
 <p><img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_in_napari.png" alt></p>
@@ -100,7 +95,12 @@ pip install napari-zelda  </code></pre><p><strong>Option B.</strong> Alternative
 <img src="https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Launch_ZELDA.png" alt></p>
 </li>
 </ol>
-<h2 id="specifications">Specifications</h2>
+<p><strong>Option B.</strong> You can install <code>napari-zelda</code> also via <a href="https://pypi.org/project/pip/">pip</a>. For the best experience, create a conda environment and use napari!=0.4.11, using the following instructions:</p>
+<pre><code>conda create -y -n napari-env python==3.8  
+conda activate napari-env  
+pip install &quot;napari[all]&quot;  
+pip install napari-zelda  </code></pre><p><strong>Option C.</strong> Alternatively, clone the repository and install locally via <a href="https://pypi.org/project/pip/">pip</a>:</p>
+<pre><code>pip install -e .</code></pre><h2 id="specifications">Specifications</h2>
 <p>This <a href="https://github.com/napari/napari">napari</a> plugin was generated with <a href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> using with <a href="https://github.com/napari">@napari</a>&apos;s <a href="https://github.com/napari/cookiecutter-napari-plugin">cookiecutter-napari-plugin</a> template.</p>
 <p>The GUI has been developed using <a href="https://github.com/napari/magicgui">magicgui</a> widgets, while the image analysis and processing include functions from <a href="https://scikit-image.org/">scikit-image</a>, <a href="https://scipy.org/">SciPy</a>, and <a href="https://numpy.org/">NumPy</a>. Results are handled with <a href="https://pandas.pydata.org/">pandas</a> and <a href="https://datatable.readthedocs.io/en/latest/">datatable</a>. Plots are obtained with <a href="https://matplotlib.org/">matplotlib</a>.  </p>
 <!--

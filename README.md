@@ -55,19 +55,7 @@ For small monitors it may be convenient to float the protocol panel
 
 ## Installation
 
-**Option A.** You can install `napari-zelda` via [pip]. For the best experience, create a conda environment and use napari!=0.4.11, using the following instructions:
-
-    conda create -y -n napari-env python==3.8  
-    conda activate napari-env  
-    pip install "napari[all]"  
-    pip install napari-zelda  
-
-
-**Option B.** Alternatively, clone the repository and install locally via [pip]:
-
-    pip install -e .
-
-**Option C.** Another option is to use the napari interface to install it (make sure napari!=0.4.11):
+**Option A.** The easiest option is to use the napari interface to install ZELDA (make sure napari!=0.4.11):
 1. Plugins / Install/Uninstall Package(s)
 
   ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Plugin_install_in_napari.png)
@@ -80,6 +68,20 @@ For small monitors it may be convenient to float the protocol panel
 
 4. Launch ZELDA
 ![](https://raw.githubusercontent.com/RoccoDAnt/napari-zelda/main/docs/Clipboard_ZELDA_Launch_ZELDA.png)
+
+
+**Option B.** You can install `napari-zelda` also via [pip]. For the best experience, create a conda environment and use napari!=0.4.11, using the following instructions:
+
+    conda create -y -n napari-env python==3.8  
+    conda activate napari-env  
+    pip install "napari[all]"  
+    pip install napari-zelda  
+
+
+**Option C.** Alternatively, clone the repository and install locally via [pip]:
+
+    pip install -e .
+
 
 ## Specifications
 
