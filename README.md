@@ -9,7 +9,8 @@
 ## ZELDA: a 3D Image Segmentation and Parent-Child relation plugin for microscopy image analysis in napari
 #### Authors: Rocco D'Antuono, Giuseppina Pisignano
 
-###### Preprint: [https://www.biorxiv.org/content/10.1101/2021.10.24.465596v1](https://www.biorxiv.org/content/10.1101/2021.10.24.465596v1)
+###### Article: Front. Comput. Sci., 04 January 2022 | https://doi.org/10.3389/fcomp.2021.796117
+
 ###### Examples of 2D and 3D data sets: [https://doi.org/10.5281/zenodo.5651284](https://zenodo.org/record/5651284#.YYgn_WDP2Ch)
 ----------------------------------
 
