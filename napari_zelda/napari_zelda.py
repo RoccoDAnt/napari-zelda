@@ -208,7 +208,7 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
             )
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     properties=measure.regionprops_table(labels.data, original.data, properties= ['area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length'])
-    prop={'Area': properties['area']*np.prod(original.scale),'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
+    prop={'Area': properties['area']*original.scale[-1]*original.scale[-2],'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
     'Min_Intensity': properties['min_intensity'], 'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*original.scale[-1],
     'MinorAxis_Length': properties['minor_axis_length']*original.scale[-1]
     }
@@ -238,7 +238,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     viewer.add_image(corresponding_parents, scale=Parents_labels.scale, rgb=False, name='Labelled children objects by parent', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
 
     properties_CorrespondingParent=measure.regionprops_table(Children_labels.data, Parents_labels.data, properties=['max_intensity'])
-    prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(np.float),'Area': properties['area']*np.prod(Original_to_measure.scale),
+    prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(np.float),'Area': properties['area']*Original_to_measure.scale[-1]*Original_to_measure.scale[-2],
     'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity'],'Min_Intensity': properties['min_intensity'],
     'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*Original_to_measure.scale[-1],
     'MinorAxis_Length': properties['minor_axis_length']*Original_to_measure.scale[-1]
