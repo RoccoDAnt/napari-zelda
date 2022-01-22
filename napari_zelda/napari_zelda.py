@@ -203,7 +203,7 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
 
 @magicgui(label={'widget_type':'Label', 'label':"Measure segmented objects"}, call_button="Measure objects",
           save_log={'widget_type':'CheckBox','name':'Save_Log','text':'Save Log'},
-          save_to={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path','label':False},
+          save_to={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
           persist=True
             )
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
@@ -219,7 +219,8 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     log=Label(name='Log', tooltip=None)
     log.value="-> GB: sigma="+str(gaussian_blur_one_pop.sigma.value)+"-> Th="+str(threshold_one_pop.threshold.value)+"-> DistMap"
     log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_one_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects"
-    measure_one_pop.insert(4,log)
+    #measure_one_pop.insert(4,log)
+
 
     if save_log == True:
         Log_file = open(str(save_to)+'\Log_ZELDA_single_population.txt','w')
