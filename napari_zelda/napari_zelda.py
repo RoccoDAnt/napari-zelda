@@ -207,8 +207,9 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
           persist=True
             )
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
+    voxel_size=np.prod(original.scale)
     properties=measure.regionprops_table(labels.data, original.data, properties= ['area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length'])
-    prop={'Area': properties['area']*original.scale[-1]*original.scale[-2],'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
+    prop={'Area': properties['area']*original.scale[-1]*original.scale[-2], 'Volume': properties['area']*voxel_size,'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
     'Min_Intensity': properties['min_intensity'], 'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*original.scale[-1],
     'MinorAxis_Length': properties['minor_axis_length']*original.scale[-1]
     }
@@ -237,9 +238,10 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     binary_ch=Children_labels.data>0
     corresponding_parents=Parents_labels.data*binary_ch
     viewer.add_image(corresponding_parents, scale=Parents_labels.scale, rgb=False, name='Labelled children objects by parent', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
-
+    voxel_size=np.prod(Original_to_measure.scale)
     properties_CorrespondingParent=measure.regionprops_table(Children_labels.data, Parents_labels.data, properties=['max_intensity'])
     prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(np.float),'Area': properties['area']*Original_to_measure.scale[-1]*Original_to_measure.scale[-2],
+    'Volume': properties['area']*voxel_size,
     'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity'],'Min_Intensity': properties['min_intensity'],
     'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*Original_to_measure.scale[-1],
     'MinorAxis_Length': properties['minor_axis_length']*Original_to_measure.scale[-1]
@@ -322,7 +324,7 @@ def results_widget(viewer: 'napari.Viewer',
          )
 def image_calibration(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
     if layer:
-        scale=[int(z/xy), xy, xy]
+        scale=[z, xy, xy]
         layer.scale=scale[-layer.ndim:]
 
 @magicgui(
@@ -333,7 +335,7 @@ def image_calibration(viewer: 'napari.Viewer', label, layer: Image, xy: float = 
          )
 def image_calibration_parents(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
     if layer:
-        scale=[int(z/xy), xy, xy]
+        scale=[z, xy, xy]
         layer.scale=scale[-layer.ndim:]
 
 @magicgui(
@@ -344,7 +346,7 @@ def image_calibration_parents(viewer: 'napari.Viewer', label, layer: Image, xy: 
          )
 def image_calibration_children(viewer: 'napari.Viewer', label, layer: Image, xy: float = 1.0000, z: float = 1.0000)-> napari.types.ImageData:
     if layer:
-        scale=[int(z/xy), xy, xy]
+        scale=[z, xy, xy]
         layer.scale=scale[-layer.ndim:]
 
 
