@@ -646,7 +646,7 @@ def save_protocol(self):
                         }
         np_json_entry["steps"]=[{ "step_number": j+1, "step_name": str(np_container[j].value) } for j in range(0, (new_protocol_widget.np_steps.value))]
 
-        protocols_file=open(os.path.join(prot_path,'napari_zelda'+'protocols_dict.json'), "r+")
+        protocols_file=open(os.path.join(prot_path,'napari_zelda','protocols_dict.json'), "r+")
         protocols_json = json.load(protocols_file)
         protocols_json["Protocols"].append(np_json_entry)
         protocols_file.seek(0)
