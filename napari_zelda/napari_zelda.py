@@ -20,7 +20,7 @@ from skimage.transform import rotate
 from skimage.segmentation import watershed
 from skimage import measure
 import numpy as np
-#import pandas as pd
+import pandas as pd
 import datatable as dt
 from scipy import ndimage, misc
 import matplotlib.pyplot as plt
@@ -55,7 +55,8 @@ corresponding_widgets={
                         "Measure": "measure_one_pop",
                         "Plot": "results_widget",
                         "Image Calibration": "image_calibration",
-                        "Morphological Operation":"morphological_operation"
+                        "Morphological Operation":"morphological_operation",
+                        "Filter by Area":"filterByArea_widget"
                         }
 
 protocols_description=open(os.path.join(prot_path,'napari_zelda','protocols_description.txt'), 'r').read()
@@ -616,7 +617,7 @@ def new_protocol_widget(viewer: 'napari.Viewer',
                    np_steps,
                    Log
                    ):
-                   steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operation']
+                   steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operation','Filter by Area']
                    np_container=Container()
                    for k in range(0, np_steps):
                        np_container.insert(k, ComboBox(choices=steps_types, value=steps_types[0], label='Select step '+str(k+1)+':', name='step_'+str(k)+'', tooltip='Choose a function for this step of the custom protocol'))
@@ -653,6 +654,29 @@ def save_protocol(self):
         new_protocol_widget.Log.value = '"'+new_protocol_widget.np_name.value+'" saved to the database'
         new_protocol_widget.Log.visible=True
         protocols_file.close()
+
+@magicgui(label={'widget_type':'Label', 'label':"Filter labelled object by area"},
+          layout='vertical',
+          table_path={'widget_type': 'FileEdit', 'value':'Documents\properties.csv', 'mode':'r','filter':'*.csv'},
+          Area_Min={"widget_type": "Slider", "min": 1, "max": 1000000000},
+          Area_Max={"widget_type": "Slider", "min": 10, "max": 1000000000},
+          persist=True,
+          call_button="Apply filter",
+          result_widget=False
+          )
+def filterByArea_widget(viewer: 'napari.Viewer',
+                   label,
+                   table_path,
+                   layer: Image,
+                   Area_Min: int = 10,
+                   Area_Max: int = 10000
+                   )-> napari.types.ImageData:
+    table=pd.read_csv(table_path)
+    #table = dt.fread(table_path)
+    if layer is not None:
+        filteredAreaValues = np.array(table['Label'][table['Area']>Area_Min][table['Area']<Area_Max])
+        mask=np.isin(layer.data, filteredAreaValues)
+        viewer.add_image(layer.data*np.array(mask), scale=layer.scale, name='FilteredByArea_'+str(Area_Min)+'-'+str(Area_Max), opacity=0.6, blending='opaque', colormap='inferno')
 
 ### Add here new functionalities for ZELDA ###
 ### @magicgui(layout="vertical")
