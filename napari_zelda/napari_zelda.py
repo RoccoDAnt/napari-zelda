@@ -240,7 +240,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     viewer.add_image(corresponding_parents, scale=Parents_labels.scale, rgb=False, name='Labelled children objects by parent', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
     voxel_size=np.prod(Original_to_measure.scale)
     properties_CorrespondingParent=measure.regionprops_table(Children_labels.data, Parents_labels.data, properties=['max_intensity'])
-    prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(np.float),'Area': properties['area']*Original_to_measure.scale[-1]*Original_to_measure.scale[-2],
+    prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(float),'Area': properties['area']*Original_to_measure.scale[-1]*Original_to_measure.scale[-2],
     'Volume': properties['area']*voxel_size,
     'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity'],'Min_Intensity': properties['min_intensity'],
     'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*Original_to_measure.scale[-1],
