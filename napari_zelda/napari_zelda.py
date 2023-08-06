@@ -207,8 +207,8 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
             )
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     voxel_size=np.prod(original.scale)
-    properties=measure.regionprops_table(labels.data, original.data, properties= ['area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','axis_major_length','axis_minor_length'])
-    prop={'Area': properties['area']*original.scale[-1]*original.scale[-2], 'Volume': properties['area']*voxel_size,'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
+    properties=measure.regionprops_table(labels.data, original.data, properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','axis_major_length','axis_minor_length'])
+    prop={'Label': properties['label'], 'Area': properties['area']*original.scale[-1]*original.scale[-2], 'Volume': properties['area']*voxel_size,'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
     'Min_Intensity': properties['min_intensity'], 'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['axis_major_length']*original.scale[-1],
     'MinorAxis_Length': properties['axis_minor_length']*original.scale[-1]
     }
@@ -239,7 +239,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     viewer.add_image(corresponding_parents, scale=Parents_labels.scale, rgb=False, name='Labelled children objects by parent', opacity=0.6, rendering='mip', blending='additive', colormap='inferno')
     voxel_size=np.prod(Original_to_measure.scale)
     properties_CorrespondingParent=measure.regionprops_table(Children_labels.data, Parents_labels.data, properties=['max_intensity'])
-    prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(float),'Area': properties['area']*Original_to_measure.scale[-1]*Original_to_measure.scale[-2],
+    prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(float), 'Label': properties['label'], 'Area': properties['area']*Original_to_measure.scale[-1]*Original_to_measure.scale[-2],
     'Volume': properties['area']*voxel_size,
     'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity'],'Min_Intensity': properties['min_intensity'],
     'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['axis_major_length']*Original_to_measure.scale[-1],
