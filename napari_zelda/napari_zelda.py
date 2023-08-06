@@ -208,10 +208,10 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
             )
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     voxel_size=np.prod(original.scale)
-    properties=measure.regionprops_table(labels.data, original.data, properties= ['area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length'])
+    properties=measure.regionprops_table(labels.data, original.data, properties= ['area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','axis_major_length','axis_minor_length'])
     prop={'Area': properties['area']*original.scale[-1]*original.scale[-2], 'Volume': properties['area']*voxel_size,'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
-    'Min_Intensity': properties['min_intensity'], 'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*original.scale[-1],
-    'MinorAxis_Length': properties['minor_axis_length']*original.scale[-1]
+    'Min_Intensity': properties['min_intensity'], 'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['axis_major_length']*original.scale[-1],
+    'MinorAxis_Length': properties['axis_minor_length']*original.scale[-1]
     }
     #prop_df=pd.DataFrame(prop)
     prop_df=dt.Frame(prop) #datatable instead of pandas
@@ -233,7 +233,7 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
           persist=True
             )
 def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Children_labels: Image, Original_to_measure: Image, save_to_path):
-    properties=measure.regionprops_table(Children_labels.data, Original_to_measure.data, properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','major_axis_length','minor_axis_length']
+    properties=measure.regionprops_table(Children_labels.data, Original_to_measure.data, properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','axis_major_length','axis_minor_length']
     )
     binary_ch=Children_labels.data>0
     corresponding_parents=Parents_labels.data*binary_ch
@@ -243,8 +243,8 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     prop={'Parent_label': properties_CorrespondingParent['max_intensity'].astype(float),'Area': properties['area']*Original_to_measure.scale[-1]*Original_to_measure.scale[-2],
     'Volume': properties['area']*voxel_size,
     'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity'],'Min_Intensity': properties['min_intensity'],
-    'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['major_axis_length']*Original_to_measure.scale[-1],
-    'MinorAxis_Length': properties['minor_axis_length']*Original_to_measure.scale[-1]
+    'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['axis_major_length']*Original_to_measure.scale[-1],
+    'MinorAxis_Length': properties['axis_minor_length']*Original_to_measure.scale[-1]
     }
     #prop_df=pd.DataFrame(prop)
     prop_df=dt.Frame(prop) #datatable instead of pandas
