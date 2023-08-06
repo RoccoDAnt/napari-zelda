@@ -71,7 +71,6 @@ def threshold_one_pop(viewer: 'napari.Viewer', label, Otsu, layer: Image, thresh
     if layer:
         if Otsu==True:
             threshold = skimage.filters.threshold_otsu(np.array(layer.data))
-            print(threshold)
         th=layer.data>threshold
         viewer.add_image(th, scale=layer.scale, name='Threshold th='+str(threshold)+' of '+str(layer.name))
 
