@@ -74,14 +74,21 @@ For small monitors it may be convenient to float the protocol panel
 **Option B.** You can install `napari-zelda` also via [pip]. For the best experience, create a conda environment and use napari!=0.4.11, using the following instructions:
 
     conda create -y -n napari-env python==3.8  
-    conda activate napari-env  
-    pip install "napari[all]"  
+    conda activate napari-env
+    conda install napari pyqt  
     pip install napari-zelda  
 
 
 **Option C.** Alternatively, clone the repository and install locally via [pip]:
 
     pip install -e .
+
+**Option D.** Get the latest code with [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [pip]:
+    
+    conda create -y -n napari-env python=3.8 git
+    conda activate napari-env
+    conda install napari pyqt
+    pip install git+https://github.com/RoccoDAnt/napari-zelda.git
 
 
 ## Specifications
