@@ -50,3 +50,8 @@ Custom protocols can be imported/exported and exchanged with the community in fe
 2. Choose a destination .json file
 3. Protocols will be appended to the existing destination file, or a new file will be created
 4. You new .json file will contain your protocols, so they can be exchanged with the community.
+
+WIDGETS
+Additional widgets that can be linked in a new PROTOCOL together with the base widgets (Image calibration, Gaussian Blur, Threshold, etc.)
+- "Morphological Operations": using a binary image allows the morphological Erosion, Dilation, Closing, Opening
+- "Filter by Area": Using a result table and a layer with labels creates a new layer containing only the labels within Area_Min and Area_Max

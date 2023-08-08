@@ -21,7 +21,7 @@ from skimage.segmentation import watershed
 from skimage import measure
 import numpy as np
 import pandas as pd
-import datatable as dt
+#import datatable as dt #if using datatable instead of pandas
 from scipy import ndimage, misc
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvas
@@ -55,7 +55,7 @@ corresponding_widgets={
                         "Measure": "measure_one_pop",
                         "Plot": "results_widget",
                         "Image Calibration": "image_calibration",
-                        "Morphological Operation":"morphological_operation",
+                        "Morphological Operations":"morphological_operations",
                         "Filter by Area":"filterByArea_widget"
                         }
 
@@ -208,18 +208,39 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
             )
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     voxel_size=np.prod(original.scale)
-    properties=measure.regionprops_table(labels.data, original.data, properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','axis_major_length','axis_minor_length'])
+    properties=measure.regionprops_table(labels.data, original.data, properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','axis_major_length','axis_minor_length','centroid','weighted_centroid','extent','solidity'])
     prop={'Label': properties['label'], 'Area': properties['area']*original.scale[-1]*original.scale[-2], 'Volume': properties['area']*voxel_size,'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['mean_intensity'],
     'Min_Intensity': properties['min_intensity'], 'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['axis_major_length']*original.scale[-1],
-    'MinorAxis_Length': properties['axis_minor_length']*original.scale[-1]
+    'MinorAxis_Length': properties['axis_minor_length']*original.scale[-1],
+    'Extent': properties['extent'],
+    'Solidity': properties['solidity']
     }
-    #prop_df=pd.DataFrame(prop)
-    prop_df=dt.Frame(prop) #datatable instead of pandas
+    if  len(original.data.shape)==2:
+        prop['Centroid_X']= properties['centroid-1']*original.scale[-1]
+        prop['Centroid_Y']= properties['centroid-0']*original.scale[-2]
+
+    if len(original.data.shape)==3:
+        prop['Centroid_X']= properties['centroid-2']*original.scale[-1]
+        prop['Centroid_Y']= properties['centroid-1']*original.scale[-2]
+        prop['Centroid_Z']= properties['centroid-0']*original.scale[-3]
+
+    if  len(original.data.shape)==2:
+        prop['Weighted_Centroid_X']= properties['weighted_centroid-1']*original.scale[-1]
+        prop['Weighted_Centroid_Y']= properties['weighted_centroid-0']*original.scale[-2]
+
+    if len(original.data.shape)==3:
+        prop['Weighted_Centroid_X']= properties['weighted_centroid-2']*original.scale[-1]
+        prop['Weighted_Centroid_Y']= properties['weighted_centroid-1']*original.scale[-2]
+        prop['Weighted_Centroid_Z']= properties['weighted_centroid-0']*original.scale[-3]
+
+    prop_df=pd.DataFrame(prop)
+    #prop_df=dt.Frame(prop) #datatable instead of pandas
     prop_df.to_csv(str(save_to)+'\Results.csv')
 
     log=Label(name='Log', tooltip=None)
     log.value="-> GB: sigma="+str(gaussian_blur_one_pop.sigma.value)+"-> Th="+str(threshold_one_pop.threshold.value)+"-> DistMap"
-    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_one_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects"
+    #log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_one_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects" #if using datatable
+    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_one_pop.min_dist.value) + " -> Found n="+str(len(prop_df))+ " objects"
     #measure_one_pop.insert(4,log)
 
 
@@ -233,7 +254,7 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
           persist=True
             )
 def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Children_labels: Image, Original_to_measure: Image, save_to_path):
-    properties=measure.regionprops_table(Children_labels.data, Original_to_measure.data, properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','axis_major_length','axis_minor_length']
+    properties=measure.regionprops_table(Children_labels.data, Original_to_measure.data, properties= ['label','area', 'mean_intensity','min_intensity','max_intensity','equivalent_diameter','axis_major_length','axis_minor_length','centroid','weighted_centroid','extent','solidity']
     )
     binary_ch=Children_labels.data>0
     corresponding_parents=Parents_labels.data*binary_ch
@@ -244,17 +265,38 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     'Volume': properties['area']*voxel_size,
     'Equivalent_diameter': properties['equivalent_diameter']*Original_to_measure.scale[-1],'MFI': properties['mean_intensity'],'Min_Intensity': properties['min_intensity'],
     'Max_Intensity': properties['max_intensity'],'MajorAxis_Length': properties['axis_major_length']*Original_to_measure.scale[-1],
-    'MinorAxis_Length': properties['axis_minor_length']*Original_to_measure.scale[-1]
+    'MinorAxis_Length': properties['axis_minor_length']*Original_to_measure.scale[-1],
+    'Extent': properties['extent'],
+    'Solidity': properties['solidity']
     }
-    #prop_df=pd.DataFrame(prop)
-    prop_df=dt.Frame(prop) #datatable instead of pandas
+    if  len(Original_to_measure.data.shape)==2:
+        prop['Centroid_X']= properties['centroid-1']*Original_to_measure.scale[-1]
+        prop['Centroid_Y']= properties['centroid-0']*Original_to_measure.scale[-2]
+
+    if len(Original_to_measure.data.shape)==3:
+        prop['Centroid_X']= properties['centroid-2']*Original_to_measure.scale[-1]
+        prop['Centroid_Y']= properties['centroid-1']*Original_to_measure.scale[-2]
+        prop['Centroid_Z']= properties['centroid-0']*Original_to_measure.scale[-3]
+
+    if  len(Original_to_measure.data.shape)==2:
+        prop['Weighted_Centroid_X']= properties['weighted_centroid-1']*Original_to_measure.scale[-1]
+        prop['Weighted_Centroid_Y']= properties['weighted_centroid-0']*Original_to_measure.scale[-2]
+
+    if len(Original_to_measure.data.shape)==3:
+        prop['Weighted_Centroid_X']= properties['weighted_centroid-2']*Original_to_measure.scale[-1]
+        prop['Weighted_Centroid_Y']= properties['weighted_centroid-1']*Original_to_measure.scale[-2]
+        prop['Weighted_Centroid_Z']= properties['weighted_centroid-0']*Original_to_measure.scale[-3]
+
+    prop_df=pd.DataFrame(prop)
+    #prop_df=dt.Frame(prop) #datatable instead of pandas
     prop_df.to_csv(str(save_to_path)+'\Results_parents-children.csv')
 
     log=Label(name='Log', tooltip=None)
     log.value="-> GB: sigma="+str(gaussian_blur_parent_pop.sigma.value)+"-> Th_parents="+str(threshold_parents.threshold.value)+"-> DistMap"
     log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_parent_pop.min_dist.value) + " -> Found n="+str( np.max(prop_df['Parent_label'].to_numpy()) )+ " objects"
     log.value=log.value+"\n-> GB: sigma="+str(gaussian_blur_children_pop.sigma.value)+"-> Th_children="+str(threshold_children.threshold.value)+"-> DistMap"
-    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_children_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects"
+    #log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_children_pop.min_dist.value) + " -> Found n="+str(prop_df.nrows)+ " objects" #if using datatable
+    log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_children_pop.min_dist.value) + " -> Found n="+str(len(prop_df))+ " objects"
     measure_one_pop.insert(4,log)
 
     #if save_log == True:
@@ -268,9 +310,9 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
           plot_s={'widget_type':'CheckBox','name':'Scatterplot','text':'Scatterplot'},
           save_plots={'widget_type':'CheckBox','name':'Save_plots','text':'Save plots'},
           saveTo_path={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
-          histogram={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label')},
-          scatterplot_X={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label')},
-          scatterplot_Y={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label')},
+          histogram={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label','Weighted_Centroid_X','Weighted_Centroid_Y','Weighted_Centroid_Z','Centroid_X','Centroid_Y','Centroid_Z','Extent','Solidity')},
+          scatterplot_X={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label','Weighted_Centroid_X','Weighted_Centroid_Y','Weighted_Centroid_Z','Centroid_X','Centroid_Y','Centroid_Z','Extent','Solidity')},
+          scatterplot_Y={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label','Weighted_Centroid_X','Weighted_Centroid_Y','Weighted_Centroid_Z','Centroid_X','Centroid_Y','Centroid_Z','Extent','Solidity')},
           persist=True,
           call_button="Plot",
           result_widget=False
@@ -286,12 +328,15 @@ def results_widget(viewer: 'napari.Viewer',
                    scatterplot_X: str='Area',
                    scatterplot_Y: str='MFI'
                    ):
-#    table=pd.read_csv(table_path)
-    table = dt.fread(table_path)
+    table=pd.read_csv(table_path) #if using pandas
+
+#    table = dt.fread(table_path) #if using datatable
     if plot_h== True:
+        hist_data=table[str(histogram)][table[str(histogram)]!=np.inf][table[str(histogram)]!=np.NINF].dropna().to_numpy() #if using pandas
         plot_widget_histogram = FigureCanvas(Figure(figsize=(2, 1.5), dpi=150))
         ax = plot_widget_histogram.figure.subplots()
-        ax.set(xlim=(0, 5*np.median(table[str(histogram)])), ylim=(0, table.nrows))
+#        ax.set(xlim=(0, 5*np.median(table[str(histogram)])), ylim=(0, table.nrows)) #if using datatable
+        ax.set(xlim=(0, 5*np.median(hist_data)), ylim=(0, len(hist_data)))
         ax.set_title('Histogram of '+histogram, color='gray')
         ax.set_xlabel(str(histogram))
         ax.set_ylabel('Counts')
@@ -303,13 +348,16 @@ def results_widget(viewer: 'napari.Viewer',
         if save_plots== True:
             plot_widget_histogram.print_tiff(str(saveTo_path)+'\Histogram of '+histogram+'.tiff')
     if plot_s== True:
+        scatter_data_x=table[str(scatterplot_X)][table[str(scatterplot_X)]!=np.inf][table[str(scatterplot_X)]!=np.NINF][table[str(scatterplot_Y)]!=np.inf][table[str(scatterplot_Y)]!=np.NINF].dropna().to_numpy() #if using pandas
+        scatter_data_y=table[str(scatterplot_Y)][table[str(scatterplot_Y)]!=np.inf][table[str(scatterplot_Y)]!=np.NINF][table[str(scatterplot_X)]!=np.inf][table[str(scatterplot_X)]!=np.NINF].dropna().to_numpy() #if using pandas
         plot_widget_scattering = FigureCanvas(Figure(figsize=(2, 1.5), dpi=150))
         ax = plot_widget_scattering.figure.subplots()
-        ax.set(xlim=(0, 5*np.median(table[str(scatterplot_X)])), ylim=(0, 5*np.median(table[str(scatterplot_Y)])))
+#        ax.set(xlim=(0, 5*np.median(table[str(scatterplot_X)])), ylim=(0, 5*np.median(table[str(scatterplot_Y)]))) #if using datatable
+        ax.set(xlim=(0, 5*np.median(scatter_data_x)), ylim=(0, 5*np.median(scatter_data_y)))
         ax.set_title('Scatterplot of '+str(scatterplot_X)+' vs '+str(scatterplot_Y), color='gray')
         ax.set_xlabel(str(scatterplot_X))
         ax.set_ylabel(str(scatterplot_Y))
-        ax.scatter(data=table, x=scatterplot_X, y=scatterplot_Y, color='blue')
+        ax.scatter(x=scatter_data_x, y=scatter_data_y, color='blue')
         ax.tick_params(labelright=False, right=False,labeltop=False,top=False,colors='black')
         plot_widget_scattering.figure.set_tight_layout('tight')
         viewer.window.add_dock_widget(plot_widget_scattering,name='Plot results',area='bottom')
@@ -350,11 +398,11 @@ def image_calibration_children(viewer: 'napari.Viewer', label, layer: Image, xy:
         layer.scale=scale[-layer.ndim:]
 
 
-@magicgui(label={'widget_type':'Label', 'label':"Morphological Operation"},
+@magicgui(label={'widget_type':'Label', 'label':"Morphological Operations"},
           Operation={'widget_type':'ComboBox', 'label':"Morphological Operation", 'choices':['Erosion','Dilation','Opening','Closing']},
           call_button="Process",
           persist=True)
-def morphological_operation(viewer: 'napari.Viewer', label, Operation, Original: Image, element_size: int=1)-> napari.types.ImageData:
+def morphological_operations(viewer: 'napari.Viewer', label, Operation, Original: Image, element_size: int=1)-> napari.types.ImageData:
     if Original:
         selem = skimage.morphology.disk(element_size)
         if Operation == 'Erosion':
@@ -446,7 +494,7 @@ def save_protocols_to_file(self):
 def launch_ZELDA(
         viewer: 'napari.Viewer',
         textbox,
-        protocols: list= protocols,
+        #protocols: list= protocols,
         dropdown: str= 'Segment a single population'
         ):
 
@@ -590,7 +638,7 @@ def launch_ZELDA(
             custom_panel=Container(name='Custom Protocol: "'+dropdown+'"', annotation=None, label=None, visible=True, enabled=True,
                                          gui_only=False, layout='horizontal', labels=False)
 
-            steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operation']
+            steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operations']
             available_protocols=len(protocols)
             choosen_protocol=protocols.index(dropdown)
 
@@ -617,7 +665,7 @@ def new_protocol_widget(viewer: 'napari.Viewer',
                    np_steps,
                    Log
                    ):
-                   steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operation','Filter by Area']
+                   steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operations','Filter by Area']
                    np_container=Container()
                    for k in range(0, np_steps):
                        np_container.insert(k, ComboBox(choices=steps_types, value=steps_types[0], label='Select step '+str(k+1)+':', name='step_'+str(k)+'', tooltip='Choose a function for this step of the custom protocol'))
