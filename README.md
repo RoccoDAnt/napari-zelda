@@ -84,7 +84,7 @@ For small monitors it may be convenient to float the protocol panel
     pip install -e .
 
 **Option D.** Get the latest code with [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [pip]:
-    
+
     conda create -y -n napari-env python=3.8 git
     conda activate napari-env
     conda install napari pyqt
@@ -146,6 +146,8 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 [Apache Software License 2.0]: http://www.apache.org/licenses/LICENSE-2.0
 [Mozilla Public License 2.0]: https://www.mozilla.org/media/MPL/2.0/index.txt
 [cookiecutter-napari-plugin]: https://github.com/napari/cookiecutter-napari-plugin
+
+[file an issue]: https://github.com/RoccoDAnt/napari-zelda/issues
 
 [napari]: https://github.com/napari/napari
 [tox]: https://tox.readthedocs.io/en/latest/
