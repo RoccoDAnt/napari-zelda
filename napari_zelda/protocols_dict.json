@@ -44,6 +44,16 @@
                     "step_name": "Morphological Operations"
                 }
             ]
+        },
+        {
+            "name": "Median Filter",
+            "widget": "Median Filter_protocol_widget",
+            "steps": [
+                {
+                    "step_number": 1,
+                    "step_name": "Median Filter"
+                }
+            ]
         }
     ]
 }

@@ -4,3 +4,4 @@ Data Plotter
 Design a New Protocol
 Import and Export Protocols
 MorphologicalOperations
+Median Filter

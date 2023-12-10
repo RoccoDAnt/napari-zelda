@@ -56,7 +56,8 @@ corresponding_widgets={
                         "Plot": "results_widget",
                         "Image Calibration": "image_calibration",
                         "Morphological Operations":"morphological_operations",
-                        "Filter by Area":"filterByArea_widget"
+                        "Filter by Area":"filterByArea_widget",
+                        "Median Filter":"median_filter"
                         }
 
 protocols_description=open(os.path.join(prot_path,'napari_zelda','protocols_description.txt'), 'r').read()
@@ -672,7 +673,7 @@ def new_protocol_widget(viewer: 'napari.Viewer',
                    np_steps,
                    Log
                    ):
-                   steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operations','Filter by Area']
+                   steps_types = ['Threshold', 'GaussianBlur', 'DistanceMap', 'ShowSeeds', 'Watershed', 'Measure', 'Plot','Image Calibration','Morphological Operations','Filter by Area', 'Median Filter']
                    np_container=Container()
                    for k in range(0, np_steps):
                        np_container.insert(k, ComboBox(choices=steps_types, value=steps_types[0], label='Select step '+str(k+1)+':', name='step_'+str(k)+'', tooltip='Choose a function for this step of the custom protocol'))
@@ -732,6 +733,21 @@ def filterByArea_widget(viewer: 'napari.Viewer',
         filteredAreaValues = np.array(table['Label'][table['Area']>Area_Min][table['Area']<Area_Max])
         mask=np.isin(layer.data, filteredAreaValues)
         viewer.add_image(layer.data*np.array(mask), scale=layer.scale, name='FilteredByArea_'+str(Area_Min)+'-'+str(Area_Max), opacity=0.6, blending='opaque', colormap='inferno')
+
+@magicgui(labels=False,
+         label={'widget_type':'Label', 'value':"Median Filter"},
+         element_size={'widget_type': 'IntSlider', "max": 15, 'min':0},
+         mode={"choices": ["reflect", "constant", "nearest", "mirror", "wrap"]},
+         call_button="Apply",
+         persist=True)
+def median_filter(viewer: 'napari.Viewer', label, layer: Image, element_size: int = 1, mode="nearest")-> napari.types.ImageData:
+    if layer:
+        if  len(layer.data.shape)==2:
+            selem = skimage.morphology.disk(element_size)
+        elif  len(layer.data.shape)==3:
+            selem = skimage.morphology.cube(element_size)
+        median=skimage.filters.median(layer.data, footprint=selem, mode=mode)
+        viewer.add_image(median, scale=layer.scale, name='Median radius='+str(element_size)+' of '+str(layer.name))
 
 ### Add here new functionalities for ZELDA ###
 ### @magicgui(layout="vertical")
