@@ -408,7 +408,10 @@ def image_calibration_children(viewer: 'napari.Viewer', label, layer: Image, xy:
           persist=True)
 def morphological_operations(viewer: 'napari.Viewer', label, Operation, Original: Image, element_size: int=1)-> napari.types.ImageData:
     if Original:
-        selem = skimage.morphology.disk(element_size)
+        if  len(Original.data.shape)==2:
+            selem = skimage.morphology.disk(element_size)
+        elif  len(Original.data.shape)==3:
+            selem = skimage.morphology.cube(element_size)
         if Operation == 'Erosion':
             morph_processed = skimage.morphology.erosion(Original.data, selem)
         elif Operation == 'Dilation':
