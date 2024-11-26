@@ -12,6 +12,9 @@
 ###### Article: Front. Comput. Sci., 04 January 2022 | https://doi.org/10.3389/fcomp.2021.796117
 
 ###### Examples of 2D and 3D data sets: [https://doi.org/10.5281/zenodo.5651284](https://zenodo.org/record/5651284#.YYgn_WDP2Ch)
+
+###### Video tutorial: ["Napari Zelda Tutorial on 3D image segmentation for microscopy - Rocco D'Antuono" - LIBRE Hub YouTube channel](https://www.youtube.com/watch?v=Sl_A8_XB4U4)
+
 ----------------------------------
 
 ## What you can do with ZELDA plugin for napari
