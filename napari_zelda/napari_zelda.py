@@ -229,9 +229,9 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
                 prop['Weighted_Centroid_X']= properties['centroid_weighted-1']*original.scale[-1]
                 prop['Weighted_Centroid_Y']= properties['centroid_weighted-0']*original.scale[-2]
 
-                additional_properties_2D=measure.regionprops_table(single_labels.data, original.data, properties= ['orientation','perimeter'])
-                prop['Orientation']= additional_properties_2D['orientation']
-                prop['Perimeter']= additional_properties_2D['perimeter']*original.scale[-1]
+                #additional_properties_2D=measure.regionprops_table(single_labels.data, original.data, properties= ['orientation','perimeter'])
+                #prop['Orientation']= additional_properties_2D['orientation']
+                #prop['Perimeter']= additional_properties_2D['perimeter']*original.scale[-1]
 
             if len(original.data.shape)==3:
                 prop['Centroid_X']= properties['centroid-2']*original.scale[-1]
@@ -257,9 +257,9 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
                 prop['Weighted_Centroid_X']= properties['centroid_weighted-1']*original.scale[-1]
                 prop['Weighted_Centroid_Y']= properties['centroid_weighted-0']*original.scale[-2]
 
-                additional_properties_2D=measure.regionprops_table(single_labels.data, original.data, properties= ['orientation','perimeter'])
-                prop['Orientation']= additional_properties_2D['orientation']
-                prop['Perimeter']= additional_properties_2D['perimeter']*original.scale[-1]
+                #additional_properties_2D=measure.regionprops_table(single_labels.data, original.data, properties= ['orientation','perimeter'])
+                #prop['Orientation']= additional_properties_2D['orientation']
+                #prop['Perimeter']= additional_properties_2D['perimeter']*original.scale[-1]
 
             if len(original.data.shape)==3:
                 prop['Centroid_X']= properties['centroid-2']*original.scale[-1]
