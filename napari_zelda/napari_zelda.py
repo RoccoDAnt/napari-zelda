@@ -405,7 +405,7 @@ def results_widget(viewer: 'napari.Viewer',
 
 #    table = dt.fread(table_path) #if using datatable
     if plot_h== True:
-        hist_data=table[str(histogram)][table[str(histogram)]!=np.inf][table[str(histogram)]!=np.NINF].dropna().to_numpy() #if using pandas
+        hist_data=table[str(histogram)][table[str(histogram)]!=np.inf][table[str(histogram)]!=-np.inf].dropna().to_numpy() #if using pandas
         plot_widget_histogram = FigureCanvas(Figure(figsize=(2, 1.5), dpi=150))
         ax = plot_widget_histogram.figure.subplots()
 #        ax.set(xlim=(0, 5*np.median(table[str(histogram)])), ylim=(0, table.nrows)) #if using datatable
@@ -421,8 +421,8 @@ def results_widget(viewer: 'napari.Viewer',
         if save_plots== True:
             plot_widget_histogram.print_tiff(str(saveTo_path)+'\Histogram of '+histogram+'.tiff')
     if plot_s== True:
-        scatter_data_x=table[str(scatterplot_X)][table[str(scatterplot_X)]!=np.inf][table[str(scatterplot_X)]!=np.NINF][table[str(scatterplot_Y)]!=np.inf][table[str(scatterplot_Y)]!=np.NINF].dropna().to_numpy() #if using pandas
-        scatter_data_y=table[str(scatterplot_Y)][table[str(scatterplot_Y)]!=np.inf][table[str(scatterplot_Y)]!=np.NINF][table[str(scatterplot_X)]!=np.inf][table[str(scatterplot_X)]!=np.NINF].dropna().to_numpy() #if using pandas
+        scatter_data_x=table[str(scatterplot_X)][table[str(scatterplot_X)]!=np.inf][table[str(scatterplot_X)]!=-np.inf][table[str(scatterplot_Y)]!=np.inf][table[str(scatterplot_Y)]!=-np.inf].dropna().to_numpy() #if using pandas
+        scatter_data_y=table[str(scatterplot_Y)][table[str(scatterplot_Y)]!=np.inf][table[str(scatterplot_Y)]!=-np.inf][table[str(scatterplot_X)]!=np.inf][table[str(scatterplot_X)]!=-np.inf].dropna().to_numpy() #if using pandas
         plot_widget_scattering = FigureCanvas(Figure(figsize=(2, 1.5), dpi=150))
         ax = plot_widget_scattering.figure.subplots()
 #        ax.set(xlim=(0, 5*np.median(table[str(scatterplot_X)])), ylim=(0, 5*np.median(table[str(scatterplot_Y)]))) #if using datatable
