@@ -205,7 +205,7 @@ def watershed_children_pop(viewer: 'napari.Viewer', label, DistanceMap: Image, b
 
 @magicgui(label={'widget_type':'Label', 'label':"Measure segmented objects"}, call_button="Measure objects",
           save_log={'widget_type':'CheckBox','name':'Save_Log','text':'Save Log'},
-          save_to={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
+          save_to={'widget_type': 'FileEdit', 'value':'\\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
           persist=True
             )
 def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
@@ -273,7 +273,7 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
 
     prop_df=pd.DataFrame(single_properties)
     #prop_df=dt.Frame(prop) #datatable instead of pandas
-    prop_df.to_csv(str(save_to)+'\Results.csv')
+    prop_df.to_csv(str(save_to)+'\\Results.csv')
 
     log=Label(name='Log', tooltip=None)
     log.value="-> GB: sigma="+str(gaussian_blur_one_pop.sigma.value)+"-> Th="+str(threshold_one_pop.threshold.value)+"-> DistMap"
@@ -281,12 +281,12 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
     log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_one_pop.min_dist.value) + " -> Found n="+str(len(prop_df))+ " objects"
 
     if save_log == True:
-        Log_file = open(str(save_to)+'\Log_ZELDA_single_population.txt','w')
+        Log_file = open(str(save_to)+'\\Log_ZELDA_single_population.txt','w')
         Log_file.write(log.value)
         Log_file.close()
 
 @magicgui(label={'widget_type':'Label', 'label':"Relate Parent-to-Child and Measure"}, call_button="Relate and Measure",
-          save_to_path={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
+          save_to_path={'widget_type': 'FileEdit', 'value':'\\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
           persist=True
             )
 def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Children_labels: Image, Original_to_measure: Image, save_to_path):
@@ -363,7 +363,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
 
     prop_df=pd.DataFrame(single_child_properties)
     #prop_df=dt.Frame(prop) #datatable instead of pandas
-    prop_df.to_csv(str(save_to_path)+'\Results_parents-children.csv')
+    prop_df.to_csv(str(save_to_path)+'\\Results_parents-children.csv')
 
     log=Label(name='Log', tooltip=None)
     log.value="-> GB: sigma="+str(gaussian_blur_parent_pop.sigma.value)+"-> Th_parents="+str(threshold_parents.threshold.value)+"-> DistMap"
@@ -373,16 +373,16 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
     log.value=log.value+"-> Maxima: min_dist=" + str(show_seeds_children_pop.min_dist.value) + " -> Found n="+str(len(prop_df))+ " objects"
 
     #if save_log == True:
-    Log_file = open(r''+str(save_to_path)+'\Log_ZELDA_Parents_Children.txt','w')
+    Log_file = open(r''+str(save_to_path)+'\\Log_ZELDA_Parents_Children.txt','w')
     Log_file.write(log.value)
     Log_file.close()
 
 @magicgui(label={'widget_type':'Label', 'label':"Plot results and save graphs"}, layout="vertical",
-          table_path={'widget_type': 'FileEdit', 'value':'Documents\properties.csv', 'mode':'r','filter':'*.csv'},
+          table_path={'widget_type': 'FileEdit', 'value':'Documents\\properties.csv', 'mode':'r','filter':'*.csv'},
           plot_h={'widget_type':'CheckBox','name':'Histogram','text':'Histogram'},
           plot_s={'widget_type':'CheckBox','name':'Scatterplot','text':'Scatterplot'},
           save_plots={'widget_type':'CheckBox','name':'Save_plots','text':'Save plots'},
-          saveTo_path={'widget_type': 'FileEdit', 'value':'\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
+          saveTo_path={'widget_type': 'FileEdit', 'value':'\\Documents', 'mode':'d','tooltip':'Save results to this folder path'},
           histogram={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label','Weighted_Centroid_X','Weighted_Centroid_Y','Weighted_Centroid_Z','Centroid_X','Centroid_Y','Centroid_Z','Extent','Solidity','Orientation','Perimeter')},
           scatterplot_X={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label','Weighted_Centroid_X','Weighted_Centroid_Y','Weighted_Centroid_Z','Centroid_X','Centroid_Y','Centroid_Z','Extent','Solidity','Orientation','Perimeter')},
           scatterplot_Y={'widget_type':'ComboBox','choices':('Area','MFI','Equivalent_diameter','Min_Intensity','Max_Intensity','MajorAxis_Length','MinorAxis_Length','Parent_label','Weighted_Centroid_X','Weighted_Centroid_Y','Weighted_Centroid_Z','Centroid_X','Centroid_Y','Centroid_Z','Extent','Solidity','Orientation','Perimeter')},
@@ -419,7 +419,7 @@ def results_widget(viewer: 'napari.Viewer',
 
         viewer.window.add_dock_widget(plot_widget_histogram ,name='Plot results',area='bottom')
         if save_plots== True:
-            plot_widget_histogram.print_tiff(str(saveTo_path)+'\Histogram of '+histogram+'.tiff')
+            plot_widget_histogram.print_tiff(str(saveTo_path)+'\\Histogram of '+histogram+'.tiff')
     if plot_s== True:
         scatter_data_x=table[str(scatterplot_X)][table[str(scatterplot_X)]!=np.inf][table[str(scatterplot_X)]!=-np.inf][table[str(scatterplot_Y)]!=np.inf][table[str(scatterplot_Y)]!=-np.inf].dropna().to_numpy() #if using pandas
         scatter_data_y=table[str(scatterplot_Y)][table[str(scatterplot_Y)]!=np.inf][table[str(scatterplot_Y)]!=-np.inf][table[str(scatterplot_X)]!=np.inf][table[str(scatterplot_X)]!=-np.inf].dropna().to_numpy() #if using pandas
@@ -435,7 +435,7 @@ def results_widget(viewer: 'napari.Viewer',
         plot_widget_scattering.figure.set_tight_layout('tight')
         viewer.window.add_dock_widget(plot_widget_scattering,name='Plot results',area='bottom')
         if save_plots== True:
-            plot_widget_scattering.print_tiff(str(saveTo_path)+'\Scatterplot of '+str(scatterplot_X)+' vs '+str(scatterplot_Y)+'.tiff')
+            plot_widget_scattering.print_tiff(str(saveTo_path)+'\\Scatterplot of '+str(scatterplot_X)+' vs '+str(scatterplot_Y)+'.tiff')
 
 @magicgui(
          xy={'widget_type': 'FloatSpinBox', "max": 1000000.0, 'min':0.0, 'step':0.0001, 'label':'pixel size (um)'},
@@ -494,7 +494,7 @@ def morphological_operations(viewer: 'napari.Viewer', label, Operation, Original
 
 @magicgui(label={'widget_type':'Label', 'label':"Import/Export Protocols"}, layout="vertical",
           Import_protocols_from={'widget_type': 'FileEdit', 'value':str(os.path.join(prot_path,'napari_zelda','protocols_dict.json')), 'mode':'r','filter':'*.json'},
-          Export_protocols_to={'widget_type': 'FileEdit', 'value':'Documents\ZELDA\exported_protocols_dict.json', 'mode':'w', 'filter':'*.json'},
+          Export_protocols_to={'widget_type': 'FileEdit', 'value':'Documents\\ZELDA\\exported_protocols_dict.json', 'mode':'w', 'filter':'*.json'},
           persist=True,
           call_button="Import list",
           result_widget=False
@@ -781,7 +781,7 @@ def save_protocol(self):
 
 @magicgui(label={'widget_type':'Label', 'label':"Filter labelled object by area"},
           layout='vertical',
-          table_path={'widget_type': 'FileEdit', 'value':'Documents\properties.csv', 'mode':'r','filter':'*.csv'},
+          table_path={'widget_type': 'FileEdit', 'value':'Documents\\properties.csv', 'mode':'r','filter':'*.csv'},
           Area_Min={"widget_type": "Slider", "min": 1, "max": 1000000000},
           Area_Max={"widget_type": "Slider", "min": 10, "max": 1000000000},
           persist=True,
