@@ -12,7 +12,7 @@ try:
     from napari.settings import SETTINGS
 except ImportError:
     print("Warning: import of napari.settings failed - 'save window geometry' option will not be used")
-from magicgui.widgets import SpinBox, FileEdit, Slider, FloatSlider, Label, Container, MainWindow, ComboBox, TextEdit, PushButton, ProgressBar, Select
+from magicgui.widgets import SpinBox, FileEdit, Slider, FloatSlider, FloatSpinBox, Label, Container, MainWindow, ComboBox, TextEdit, PushButton, ProgressBar, Select
 import skimage
 import skimage.morphology
 import skimage.filters
@@ -66,7 +66,7 @@ protocols_description=open(os.path.join(prot_path,'napari_zelda','protocols_desc
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Threshold"},
          Otsu={'widget_type':'CheckBox','name':'Otsu_threshold'},
-         threshold={'widget_type': 'FloatSlider', "max": 65535.0, 'min':0.0},
+         threshold={'widget_type': 'FloatSpinBox', "max": 65535.0, 'min':0.0},
          call_button="Apply",
          persist=True
          )
@@ -79,7 +79,7 @@ def threshold_one_pop(viewer: 'napari.Viewer', label, Otsu, layer: Image, thresh
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Threshold - Parents"},
-         threshold={'widget_type': 'FloatSlider', "max": 65535.0, 'min':0.0},
+         threshold={'widget_type': 'FloatSpinBox', "max": 65535.0, 'min':0.0},
          call_button="Apply",
          persist=True)
 def threshold_parents(viewer: 'napari.Viewer', label, layer: Image, threshold: int = 1)-> napari.types.ImageData:
@@ -89,7 +89,7 @@ def threshold_parents(viewer: 'napari.Viewer', label, layer: Image, threshold: i
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Threshold - Children"},
-         threshold={'widget_type': 'FloatSlider', "max": 65535.0, 'min':0.0},
+         threshold={'widget_type': 'FloatSpinBox', "max": 65535.0, 'min':0.0},
          call_button="Apply",
          persist=True)
 def threshold_children(viewer: 'napari.Viewer', label, layer: Image, threshold: int = 1)-> napari.types.ImageData:
@@ -100,7 +100,7 @@ def threshold_children(viewer: 'napari.Viewer', label, layer: Image, threshold: 
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Gaussian Blur"},
-         sigma={'widget_type': 'FloatSlider', "max": 10.0, 'min':0.0},
+         sigma={'widget_type': 'FloatSpinBox', "max": 100.0, 'min':0.0, 'step':0.1},
          mode={"choices": ["reflect", "constant", "nearest", "mirror", "wrap"]},
          call_button="Apply",
          persist=True)
@@ -111,7 +111,7 @@ def gaussian_blur_one_pop(viewer: 'napari.Viewer', label, layer: Image, sigma: f
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Gaussian Blur - Parents"},
-         sigma={'widget_type': 'FloatSlider', "max": 10.0, 'min':0.0},
+         sigma={'widget_type': 'FloatSpinBox', "max": 100.0, 'min':0.0, 'step':0.1},
          mode={"choices": ["reflect", "constant", "nearest", "mirror", "wrap"]},
          call_button="Apply",
          persist=True)
@@ -122,7 +122,7 @@ def gaussian_blur_parent_pop(viewer: 'napari.Viewer', label, layer: Image, sigma
 
 @magicgui(labels=False,
          label={'widget_type':'Label', 'value':"Gaussian Blur - Children"},
-         sigma={'widget_type': 'FloatSlider', "max": 10.0, 'min':0.0},
+         sigma={'widget_type': 'FloatSpinBox', "max": 100.0, 'min':0.0, 'step':0.1},
          mode={"choices": ["reflect", "constant", "nearest", "mirror", "wrap"]},
          call_button="Apply",
          persist=True)
