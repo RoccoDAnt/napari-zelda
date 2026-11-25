@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/pypi/l/napari-zelda.svg?color=green)](https://github.com)
 [![Python Version](https://img.shields.io/pypi/pyversions/napari-zelda.svg?color=green)](https://pypi.org)
-[![tests](https://github.com/badge.svg)](https://github.com)
+[![tests](https://img.shields.io/github/actions/workflow/status/RoccoDAnt/napari-zelda/test_and_deploy.yml?branch=main&label=tests)](https://github.com/RoccoDAnt/napari-zelda/actions/workflows/test_and_deploy.yml)
 [![codecov](https://codecov.io/gh/RoccoDAnt/napari-zelda/branch/main/graph/badge.svg)](https://codecov.io/gh/RoccoDAnt/napari-zelda)
 [![PyPI](https://img.shields.io/pypi/v/napari-zelda.svg?color=green)](https://pypi.org)
 
