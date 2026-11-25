@@ -1,6 +1,6 @@
 name: tests
 
-on: 
+on:
   push:
     branches:
       - master
@@ -37,6 +37,7 @@ jobs:
           sudo apt-get install -y libdbus-1-3 libxkbcommon-x11-0 libxcb-icccm4 \
             libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
             libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0 libxcb-cursor0 \
+            libxcb-shape0 libxcb-util1 libx11-xcb1 libfontconfig1 \
             libgl1-mesa-dri libglx-mesa0 libegl1 xvfb
 
       - name: Install Windows OpenGL
@@ -50,11 +51,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools tox tox-gh-actions
 
-      - name: Test with tox
-        run: tox
+      - name: Test with tox (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a tox
         env:
           PLATFORM: ${{ matrix.platform }}
           LIBGL_ALWAYS_SOFTWARE: "1"
+
+      - name: Test with tox (Windows and macOS)
+        if: runner.os != 'Linux'
+        run: tox
+        env:
+          PLATFORM: ${{ matrix.platform }}
 
       - name: Coverage
         uses: codecov/codecov-action@v4
