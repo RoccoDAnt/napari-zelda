@@ -1,0 +1,10 @@
+name: napari-zelda
+display_name: ZELDA
+contributions:
+  commands:
+    - id: napari-zelda.make_zelda_widget
+      python_name: napari_zelda:napari_experimental_provide_dock_widget
+      title: Open ZELDA Segmentation & Analysis
+  widgets:
+    - command: napari-zelda.make_zelda_widget
+      display_name: ZELDA

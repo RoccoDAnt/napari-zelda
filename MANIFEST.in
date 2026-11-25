@@ -3,6 +3,7 @@ include README.md
 include requirements.txt
 recursive-include napari_zelda *.txt
 recursive-include napari_zelda *.json
+recursive-include napari_zelda *.yaml
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
