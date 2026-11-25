@@ -1,10 +1,10 @@
 # napari-zelda
 
-[![License](https://img.shields.io/pypi/l/napari-zelda.svg?color=green)](https://github.com/RoccoDAnt/napari-zelda/raw/master/LICENSE)
-[![PyPI](https://img.shields.io/pypi/v/napari-zelda.svg?color=green)](https://pypi.org/project/napari-zelda)
-[![Python Version](https://img.shields.io/pypi/pyversions/napari-zelda.svg?color=green)](https://python.org)
-[![tests](https://github.com/RoccoDAnt/napari-zelda/workflows/tests/badge.svg)](https://github.com/RoccoDAnt/napari-zelda/actions)
-[![codecov](https://codecov.io/gh/RoccoDAnt/napari-zelda/branch/master/graph/badge.svg)](https://codecov.io/gh/RoccoDAnt/napari-zelda)
+[![License](https://img.shields.io/pypi/l/napari-zelda.svg?color=green)](https://github.com)
+[![Python Version](https://img.shields.io/pypi/pyversions/napari-zelda.svg?color=green)](https://pypi.org)
+[![tests](https://github.com)](https://github.com)
+[![codecov](https://codecov.io)](https://codecov.io/gh/RoccoDAnt/napari-zelda)
+[![PyPI](https://shields.io)](https://pypi.org)
 
 ## ZELDA: a 3D Image Segmentation and Parent-Child relation plugin for microscopy image analysis in napari
 #### Authors: Rocco D'Antuono, Giuseppina Pisignano
