@@ -218,7 +218,7 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
         mask=np.isin(labels.data, i)
         single_labels=np.array(labels.data*np.array(mask))
         try:
-            properties=measure.regionprops_table(single_labels, original.data, properties= ['label','area', 'intensity_mean','intensity_min','intensity_max','equivalent_diameter','axis_major_length','axis_minor_length','centroid','centroid_weighted','extent','solidity'])
+            properties=measure.regionprops_table(single_labels, np.asarray(original.data), properties= ['label','area', 'intensity_mean','intensity_min','intensity_max','equivalent_diameter','axis_major_length','axis_minor_length','centroid','centroid_weighted','extent','solidity'])
             prop={'Label': properties['label'], 'Area': properties['area']*original.scale[-1]*original.scale[-2], 'Volume': properties['area']*voxel_size,'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['intensity_mean'],
             'Min_Intensity': properties['intensity_min'], 'Max_Intensity': properties['intensity_max'],'MajorAxis_Length': properties['axis_major_length']*original.scale[-1],
             'MinorAxis_Length': properties['axis_minor_length']*original.scale[-1],
@@ -246,7 +246,7 @@ def measure_one_pop( label, labels: Image, original: Image, save_log, save_to):
                 prop['Weighted_Centroid_Z']= properties['centroid_weighted-0']*original.scale[-3]
             single_properties= pd.concat([single_properties, pd.DataFrame(prop)])
         except:
-            properties=measure.regionprops_table(single_labels, original.data, properties= ['label','area', 'intensity_mean','intensity_min','intensity_max','equivalent_diameter','axis_major_length','centroid','centroid_weighted','extent','solidity'])
+            properties=measure.regionprops_table(single_labels, np.asarray(original.data), properties= ['label','area', 'intensity_mean','intensity_min','intensity_max','equivalent_diameter','axis_major_length','centroid','centroid_weighted','extent','solidity'])
             prop={'Label': properties['label'], 'Area': properties['area']*original.scale[-1]*original.scale[-2], 'Volume': properties['area']*voxel_size,'Equivalent_diameter': properties['equivalent_diameter']*original.scale[-1],'MFI': properties['intensity_mean'],
             'Min_Intensity': properties['intensity_min'], 'Max_Intensity': properties['intensity_max'],'MajorAxis_Length': properties['axis_major_length']*original.scale[-1],
             'MinorAxis_Length': 0.0*original.scale[-1], #regionprops axis_minor_length error for small objects
@@ -302,7 +302,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
         mask=np.isin(Children_labels.data, i)
         single_child_labels=np.array(Children_labels.data*np.array(mask))
         try:
-            properties=measure.regionprops_table(single_child_labels, Original_to_measure.data, properties= ['label','area','intensity_mean','intensity_min','intensity_max','equivalent_diameter','axis_major_length','axis_minor_length','centroid','centroid_weighted','extent','solidity'])
+            properties=measure.regionprops_table(single_child_labels, np.asarray(Original_to_measure.data), properties= ['label','area','intensity_mean','intensity_min','intensity_max','equivalent_diameter','axis_major_length','axis_minor_length','centroid','centroid_weighted','extent','solidity'])
             properties_CorrespondingParent=measure.regionprops_table(single_child_labels, Parents_labels.data, properties=['intensity_max'])
             prop={'Parent_label': properties_CorrespondingParent['intensity_max'].astype(float), 'Label': properties['label'], 'Area': properties['area']*Original_to_measure.scale[-1]*Original_to_measure.scale[-2],
             'Volume': properties['area']*voxel_size,
@@ -319,7 +319,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
                 prop['Weighted_Centroid_X']= properties['centroid_weighted-1']*Original_to_measure.scale[-1]
                 prop['Weighted_Centroid_Y']= properties['centroid_weighted-0']*Original_to_measure.scale[-2]
 
-                additional_properties_2D_twoPop=measure.regionprops_table(single_child_labels, Original_to_measure.data, properties= ['orientation','perimeter'])
+                additional_properties_2D_twoPop=measure.regionprops_table(single_child_labels, np.asarray(Original_to_measure.data), properties= ['orientation','perimeter'])
                 prop['Orientation']= additional_properties_2D_twoPop['orientation']
                 prop['Perimeter']= additional_properties_2D_twoPop['perimeter']*Original_to_measure.scale[-1]
 
@@ -333,7 +333,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
                 prop['Weighted_Centroid_Z']= properties['centroid_weighted-0']*Original_to_measure.scale[-3]
             single_child_properties= pd.concat([single_child_properties, pd.DataFrame(prop)])
         except:
-            properties=measure.regionprops_table(single_child_labels, Original_to_measure.data, properties= ['label','area','intensity_mean','intensity_min','intensity_max','equivalent_diameter','axis_major_length','centroid','centroid_weighted','extent','solidity'])
+            properties=measure.regionprops_table(single_child_labels, np.asarray(Original_to_measure.data), properties= ['label','area','intensity_mean','intensity_min','intensity_max','equivalent_diameter','axis_major_length','centroid','centroid_weighted','extent','solidity'])
             properties_CorrespondingParent=measure.regionprops_table(single_child_labels, Parents_labels.data, properties=['intensity_max'])
             prop={'Parent_label': properties_CorrespondingParent['intensity_max'].astype(float), 'Label': properties['label'], 'Area': properties['area']*Original_to_measure.scale[-1]*Original_to_measure.scale[-2],
             'Volume': properties['area']*voxel_size,
@@ -350,7 +350,7 @@ def relate_and_measure(viewer: 'napari.Viewer', label, Parents_labels: Image, Ch
                 prop['Weighted_Centroid_X']= properties['centroid_weighted-1']*Original_to_measure.scale[-1]
                 prop['Weighted_Centroid_Y']= properties['centroid_weighted-0']*Original_to_measure.scale[-2]
 
-                additional_properties_2D_twoPop=measure.regionprops_table(single_child_labels, Original_to_measure.data, properties= ['orientation','perimeter'])
+                additional_properties_2D_twoPop=measure.regionprops_table(single_child_labels, np.asarray(Original_to_measure.data), properties= ['orientation','perimeter'])
                 prop['Orientation']= additional_properties_2D_twoPop['orientation']
                 prop['Perimeter']= additional_properties_2D_twoPop['perimeter']*Original_to_measure.scale[-1]
 
