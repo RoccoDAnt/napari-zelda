@@ -14,6 +14,8 @@
 
 ###### Examples of 2D and 3D data sets: [https://doi.org/10.5281/zenodo.5651284](https://zenodo.org/record/5651284#.YYgn_WDP2Ch)
 
+###### Example of 3D data sets (nuclei and RNA spots): [https://zenodo.org/records/8222549](https://zenodo.org/records/8222549)
+
 ###### Video tutorial: ["Napari Zelda Tutorial on 3D image segmentation for microscopy - Rocco D'Antuono" - LIBRE Hub YouTube channel](https://www.youtube.com/watch?v=Sl_A8_XB4U4)
 
 ----------------------------------
